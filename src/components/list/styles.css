@@ -1,0 +1,14 @@
+ul {
+  list-style-type: none;
+  padding: 0
+}
+
+.marked {
+  text-decoration: line-through;
+}
+
+.tasks {
+  background-color: grey;
+  margin-top: 1em;
+  padding: 1em;
+}
