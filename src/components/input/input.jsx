@@ -1,9 +1,54 @@
 import React, { Component } from 'react';
 import List from '../list/list';
+import CheckingButtons from '../checkingButtons/checkingButtons';
 import './styles.css';
 
 class Input extends Component {
   state = { value: '', tasks: [] };
+
+  deleteChecked = () => {
+    const newTasks = this.state.tasks.filter(task => !task.isDone);
+    this.setState({
+      tasks: newTasks,
+    });
+  };
+
+  uncheckAll = () => {
+    const checkedAll = this.state.tasks.slice();
+    checkedAll.forEach((item, i) => {
+      checkedAll[i].isDone = false;
+    });
+    this.setState({ tasks: checkedAll });
+  };
+
+  checkAll = () => {
+    const checkedAll = this.state.tasks.slice();
+    checkedAll.forEach((item, i) => {
+      checkedAll[i].isDone = true;
+    });
+    this.setState({ tasks: checkedAll });
+  };
+
+  submitChangeTask = (newTask, id) => {
+    this.state.tasks.forEach((task, i) => {
+      if (task.timeId === id) {
+        const newTasks = this.state.tasks.slice();
+        newTasks[i].task = newTask;
+        newTasks[i].onEdit = !newTasks[i].onEdit;
+        this.setState({ tasks: newTasks });
+      }
+    });
+  };
+
+  onEdit = id => {
+    this.state.tasks.forEach((task, i) => {
+      if (task.timeId === id) {
+        const editingTasks = this.state.tasks.slice();
+        editingTasks[i].onEdit = !editingTasks[i].onEdit;
+        this.setState({ tasks: editingTasks });
+      }
+    });
+  };
 
   removeTask = id => {
     const newTasks = this.state.tasks.filter(task => task.timeId !== id);
@@ -35,6 +80,7 @@ class Input extends Component {
         task: this.state.value,
         timeId: new Date().toLocaleTimeString(),
         isDone: false,
+        onEdit: false,
       }),
       value: '',
     });
@@ -56,7 +102,19 @@ class Input extends Component {
             ADD NEW TASK
           </button>
         </form>
-        <List tasks={this.state.tasks} removeTask={this.removeTask} markTask={this.markTask} />
+        <CheckingButtons
+          checkAll={this.checkAll}
+          deleteChecked={this.deleteChecked}
+          uncheckAll={this.uncheckAll}
+        />
+        <List
+          tasks={this.state.tasks}
+          removeTask={this.removeTask}
+          markTask={this.markTask}
+          onEdit={this.onEdit}
+          submitChangeTask={this.submitChangeTask}
+          cancelChangeTask={this.cancelChangeTask}
+        />
       </div>
     );
   }
