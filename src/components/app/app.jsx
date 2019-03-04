@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import List from '../list/list';
 import CheckingButtons from '../checkingButtons/checkingButtons';
+import ShowingButtons from '../showingButtons/showingButtons';
 import './styles.css';
 
-class Input extends Component {
+class App extends Component {
   state = { value: '', tasks: [] };
 
   deleteChecked = () => {
@@ -14,11 +15,11 @@ class Input extends Component {
   };
 
   uncheckAll = () => {
-    const checkedAll = this.state.tasks.slice();
-    checkedAll.forEach((item, i) => {
-      checkedAll[i].isDone = false;
+    const uncheckedAll = this.state.tasks.slice();
+    uncheckedAll.forEach((item, i) => {
+      uncheckedAll[i].isDone = false;
     });
-    this.setState({ tasks: checkedAll });
+    this.setState({ tasks: uncheckedAll });
   };
 
   checkAll = () => {
@@ -78,7 +79,7 @@ class Input extends Component {
     this.setState({
       tasks: this.state.tasks.concat({
         task: this.state.value,
-        timeId: new Date().toLocaleTimeString(),
+        timeId: +new Date(),
         isDone: false,
         onEdit: false,
       }),
@@ -88,36 +89,39 @@ class Input extends Component {
 
   render() {
     return (
-      <div>
-        <h1>TO-DO LIST</h1>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="text"
-            placeholder="Task..."
-            value={this.state.value}
-            onChange={this.handleChange}
-            required
+      <div className="App">
+        <ShowingButtons />
+        <div>
+          <h1>TO-DO LIST</h1>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type="text"
+              placeholder="Task..."
+              value={this.state.value}
+              onChange={this.handleChange}
+              required
+            />
+            <button className="add-button" type="submit" value="Submit">
+              ADD NEW TASK
+            </button>
+          </form>
+          <CheckingButtons
+            checkAll={this.checkAll}
+            deleteChecked={this.deleteChecked}
+            uncheckAll={this.uncheckAll}
           />
-          <button className="add-button" type="submit" value="Submit">
-            ADD NEW TASK
-          </button>
-        </form>
-        <CheckingButtons
-          checkAll={this.checkAll}
-          deleteChecked={this.deleteChecked}
-          uncheckAll={this.uncheckAll}
-        />
-        <List
-          tasks={this.state.tasks}
-          removeTask={this.removeTask}
-          markTask={this.markTask}
-          onEdit={this.onEdit}
-          submitChangeTask={this.submitChangeTask}
-          cancelChangeTask={this.cancelChangeTask}
-        />
+          <List
+            tasks={this.state.tasks}
+            removeTask={this.removeTask}
+            markTask={this.markTask}
+            onEdit={this.onEdit}
+            submitChangeTask={this.submitChangeTask}
+            cancelChangeTask={this.cancelChangeTask}
+          />
+        </div>
       </div>
     );
   }
 }
 
-export default Input;
+export default App;

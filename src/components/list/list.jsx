@@ -14,10 +14,10 @@ class List extends Component {
     const { tasks } = this.props;
 
     return tasks.length ? (
-      <ul>
+      <ul className="List">
         {tasks.map(task => {
           let markStyle = task.isDone ? 'marked' : '';
-          // let editingStyle = task.onEdit ? 'onEdit' : '';
+
           if (task.onEdit) {
             return (
               <li className="tasks" key={task.timeId}>
