@@ -1,14 +1,38 @@
 import React, { Component } from 'react';
 import List from '../list/list';
 import CheckingButtons from '../checkingButtons/checkingButtons';
-import ShowingButtons from '../showingButtons/showingButtons';
+
 import './styles.css';
 
 class App extends Component {
-  state = { value: '', tasks: [] };
+  state = { value: '', tasks: [], showFiltered: false };
+
+  showAll = () => {
+    this.setState({ showFiltered: false });
+  };
+
+  showActive = () => {
+    const activeTasks = this.state.tasks.filter(task => !task.isDone);
+    this.setState({ showFiltered: true, filteredTasks: activeTasks });
+  };
+
+  showCompleted = () => {
+    const completedTasks = this.state.tasks.filter(task => task.isDone);
+    this.setState({ showFiltered: true, filteredTasks: completedTasks });
+  };
+
+  markChecked = (id, e) => {
+    this.state.tasks.forEach((task, i) => {
+      if (task.timeId === id) {
+        const markedTask = this.state.tasks.slice();
+        markedTask[i].isChecked = e.target.checked;
+        this.setState({ tasks: markedTask });
+      }
+    });
+  };
 
   deleteChecked = () => {
-    const newTasks = this.state.tasks.filter(task => !task.isDone);
+    const newTasks = this.state.tasks.filter(task => !task.isChecked);
     this.setState({
       tasks: newTasks,
     });
@@ -17,7 +41,7 @@ class App extends Component {
   uncheckAll = () => {
     const uncheckedAll = this.state.tasks.slice();
     uncheckedAll.forEach((item, i) => {
-      uncheckedAll[i].isDone = false;
+      uncheckedAll[i].isChecked = false;
     });
     this.setState({ tasks: uncheckedAll });
   };
@@ -25,7 +49,7 @@ class App extends Component {
   checkAll = () => {
     const checkedAll = this.state.tasks.slice();
     checkedAll.forEach((item, i) => {
-      checkedAll[i].isDone = true;
+      checkedAll[i].isChecked = true;
     });
     this.setState({ tasks: checkedAll });
   };
@@ -82,6 +106,7 @@ class App extends Component {
         timeId: +new Date(),
         isDone: false,
         onEdit: false,
+        isChecked: false,
       }),
       value: '',
     });
@@ -90,7 +115,26 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <ShowingButtons />
+        <div className="Showing-Buttons">
+          <h3>Show</h3>
+          <ul className="List-Show-Buttons">
+            <li>
+              <button className="Showing-Button" onClick={this.showAll}>
+                All
+              </button>
+            </li>
+            <li>
+              <button className="Showing-Button" onClick={this.showActive}>
+                Active
+              </button>
+            </li>
+            <li>
+              <button className="Showing-Button" onClick={this.showCompleted}>
+                Completed
+              </button>
+            </li>
+          </ul>
+        </div>
         <div>
           <h1>TO-DO LIST</h1>
           <form onSubmit={this.handleSubmit}>
@@ -112,11 +156,14 @@ class App extends Component {
           />
           <List
             tasks={this.state.tasks}
+            showFiltered={this.state.showFiltered}
+            filteredTasks={this.state.filteredTasks}
             removeTask={this.removeTask}
             markTask={this.markTask}
             onEdit={this.onEdit}
             submitChangeTask={this.submitChangeTask}
             cancelChangeTask={this.cancelChangeTask}
+            markChecked={this.markChecked}
           />
         </div>
       </div>

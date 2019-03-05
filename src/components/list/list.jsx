@@ -11,7 +11,7 @@ class List extends Component {
   };
 
   render() {
-    const { tasks } = this.props;
+    const tasks = this.props.showFiltered ? this.props.filteredTasks : this.props.tasks;
 
     return tasks.length ? (
       <ul className="List">
@@ -23,14 +23,20 @@ class List extends Component {
               <li className="tasks" key={task.timeId}>
                 <input
                   type="checkbox"
-                  checked={task.isDone}
-                  onChange={e => this.props.markTask(task.timeId, e)}
+                  checked={task.isChecked}
+                  onChange={e => this.props.markChecked(task.timeId, e)}
                 />
+
                 <input
                   type="text"
                   placeholder="New task..."
                   value={this.state.value}
                   onChange={this.handleChange}
+                />
+                <input
+                  type="checkbox"
+                  checked={task.isDone}
+                  onChange={e => this.props.markTask(task.timeId, e)}
                 />
                 <button onClick={() => this.props.submitChangeTask(this.state.value, task.timeId)}>
                   Save
@@ -43,10 +49,15 @@ class List extends Component {
               <li className="tasks" key={task.timeId}>
                 <input
                   type="checkbox"
+                  checked={task.isChecked}
+                  onChange={e => this.props.markChecked(task.timeId, e)}
+                />
+                <span className={markStyle}>{task.task}</span>
+                <input
+                  type="checkbox"
                   checked={task.isDone}
                   onChange={e => this.props.markTask(task.timeId, e)}
                 />
-                <span className={markStyle}>{task.task}</span>
                 <button onClick={() => this.props.onEdit(task.timeId)}>Edit</button>
                 <button onClick={() => this.props.removeTask(task.timeId)}>Remove</button>
               </li>
