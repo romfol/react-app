@@ -7,6 +7,28 @@ import './styles.css';
 class App extends Component {
   state = { value: '', tasks: [], showFiltered: false };
 
+  sortByDate = () => {
+    const sortedTasks = [...this.state.tasks];
+    sortedTasks.sort((a, b) => a.timeId - b.timeId)
+    this.setState({ tasks: sortedTasks });
+  }
+
+  sortByTitle = () => {
+    const sortedTasks = [...this.state.tasks];
+    sortedTasks.sort((a, b) => {
+      let taskA = a.task.toUpperCase();
+      var taskB = b.task.toUpperCase();
+      if (taskA < taskB) {
+        return -1;
+      }
+      if (taskA > taskB) {
+        return 1;
+      }
+      return 0;
+    });
+    this.setState({ tasks: sortedTasks });
+  };
+
   showAll = () => {
     this.setState({ showFiltered: false });
   };
@@ -131,6 +153,19 @@ class App extends Component {
             <li>
               <button className="Showing-Button" onClick={this.showCompleted}>
                 Completed
+              </button>
+            </li>
+          </ul>
+          <h3>Sort by</h3>
+          <ul className="List-Sort-Buttons">
+            <li>
+              <button className="Sort-Button" onClick={this.sortByDate}>
+                Original order
+              </button>
+            </li>
+            <li>
+              <button className="Sort-Button" onClick={this.sortByTitle}>
+                Title
               </button>
             </li>
           </ul>
