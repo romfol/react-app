@@ -3,12 +3,42 @@
   padding: 0
 }
 
-.marked {
+.List li {
+  border-radius: 8px
+}
+
+.marked-title {
   text-decoration: line-through;
+  font-weight: 600
+}
+
+.regular-title {
+  font-weight: 700;
+  font-style: oblique
 }
 
 .tasks {
-  background-color: grey;
+  display: flex;
+  justify-content: space-around;
+  background-color: rgb(35, 141, 106);
   margin-top: 1em;
   padding: 1em;
+}
+
+.Edit-button {
+  background-color: greenyellow;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+
+  padding: 7px 12px
+}
+
+.Delete-button {
+  background-color: red;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  
+  padding: 7px 12px
 }

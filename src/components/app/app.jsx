@@ -1,17 +1,29 @@
 import React, { Component } from 'react';
 import List from '../list/list';
 import CheckingButtons from '../checkingButtons/checkingButtons';
+import Pagination from '../pagination/pagination';
 
 import './styles.css';
 
 class App extends Component {
-  state = { value: '', tasks: [], showFiltered: false };
+  state = {
+    value: '',
+    tasks: [],
+    showFiltered: false,
+    edgeItems: { indexFirstTask: 0, indexLastTask: 9 },
+  };
+
+  setEdgeTasksToShow = currentPage => {
+    const indexLastTask = currentPage * 10 - 1;
+    const indexFirstTask = indexLastTask - 9;
+    this.setState({ edgeItems: { indexFirstTask, indexLastTask } });
+  };
 
   sortByDate = () => {
     const sortedTasks = [...this.state.tasks];
-    sortedTasks.sort((a, b) => a.timeId - b.timeId)
+    sortedTasks.sort((a, b) => a.timeId - b.timeId);
     this.setState({ tasks: sortedTasks });
-  }
+  };
 
   sortByTitle = () => {
     const sortedTasks = [...this.state.tasks];
@@ -122,6 +134,7 @@ class App extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
     this.setState({
       tasks: this.state.tasks.concat({
         task: this.state.value,
@@ -171,13 +184,16 @@ class App extends Component {
           </ul>
         </div>
         <div>
-          <h1>TO-DO LIST</h1>
+          <h1 style={{ textAlign: 'center' }}>
+            <span>TO-DO LIST</span>
+          </h1>
           <form onSubmit={this.handleSubmit}>
             <input
               type="text"
               placeholder="Task..."
               value={this.state.value}
               onChange={this.handleChange}
+              className="Input"
               required
             />
             <button className="add-button" type="submit" value="Submit">
@@ -190,6 +206,7 @@ class App extends Component {
             uncheckAll={this.uncheckAll}
           />
           <List
+            edgeItems={this.state.edgeItems}
             tasks={this.state.tasks}
             showFiltered={this.state.showFiltered}
             filteredTasks={this.state.filteredTasks}
@@ -200,6 +217,7 @@ class App extends Component {
             cancelChangeTask={this.cancelChangeTask}
             markChecked={this.markChecked}
           />
+          <Pagination tasks={this.state.tasks} setEdgeTasksToShow={this.setEdgeTasksToShow} />
         </div>
       </div>
     );

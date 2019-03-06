@@ -7,9 +7,21 @@
   font-size: 3em
 }
 
+.Input {
+  padding: 12px 20px;
+  margin: 8px ;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+}
+
 .add-button {
   background-color: cyan;
-  font-weight: bold
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  margin: 2em;
+  padding: 8px 16px
 }
 
 .List-Show-Buttons {
