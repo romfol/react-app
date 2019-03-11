@@ -1,0 +1,20 @@
+.Container-List {
+  text-align: center;
+} 
+
+.Pagination-button {
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  padding: 8px 16px;
+  margin: 4px; 
+}
+
+.Pagination-button:hover {
+  background-color: cyan;
+}
+
+.active {
+  background-color: blue;
+}

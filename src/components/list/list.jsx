@@ -17,7 +17,7 @@ class List extends Component {
     return tasks.length ? (
       <ul className="List">
         {tasks.map((task, i) => {
-          if (i >= indexFirstTask && i <= indexLastTask) {
+          while (i >= indexFirstTask && i <= indexLastTask) {
             if (task.onEdit) {
               return (
                 <li className="tasks" key={task.timeId}>
@@ -38,11 +38,14 @@ class List extends Component {
                     onChange={e => this.props.markTask(task.timeId, e)}
                   />
                   <button
+                    className="Edit-button"
                     onClick={() => this.props.submitChangeTask(this.state.value, task.timeId)}
                   >
                     Save
                   </button>
-                  <button onClick={() => this.props.onEdit(task.timeId)}>Cancel</button>
+                  <button className="Delete-button" onClick={() => this.props.onEdit(task.timeId)}>
+                    Cancel
+                  </button>
                 </li>
               );
             } else
