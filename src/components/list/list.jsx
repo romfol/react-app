@@ -11,7 +11,6 @@ class List extends Component {
   };
 
   hoverOn = id => {
-    console.log(id);
     this.setState({ hoverableItem: id });
   };
 
@@ -29,11 +28,7 @@ class List extends Component {
           if (i >= indexFirstTask && i <= indexLastTask) {
             if (task.onEdit) {
               return (
-                <li
-                  className="tasks"
-                  key={task.timeId}
-                  onMouseEnter={() => console.log('hello Djeronimo', task.timeId)}
-                >
+                <li className="tasks" key={task.timeId}>
                   <input
                     type="checkbox"
                     checked={task.isChecked}
