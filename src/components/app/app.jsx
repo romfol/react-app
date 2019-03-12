@@ -10,6 +10,7 @@ class App extends Component {
     value: '',
     tasks: [],
     showFiltered: false,
+    filteredTasks: [],
     edgeItems: { indexFirstTask: 0, indexLastTask: 9 },
   };
 

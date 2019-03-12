@@ -2,12 +2,21 @@ import React, { Component } from 'react';
 import './styles.css';
 
 class List extends Component {
-  state = { value: '' };
+  state = { value: '', hoverableItem: null };
 
   handleChange = e => {
     this.setState({
       value: e.target.value,
     });
+  };
+
+  hoverOn = id => {
+    console.log(id);
+    this.setState({ hoverableItem: id });
+  };
+
+  hoverOff = () => {
+    this.setState({ hoverableItem: null });
   };
 
   render() {
@@ -20,7 +29,11 @@ class List extends Component {
           if (i >= indexFirstTask && i <= indexLastTask) {
             if (task.onEdit) {
               return (
-                <li className="tasks" key={task.timeId}>
+                <li
+                  className="tasks"
+                  key={task.timeId}
+                  onMouseEnter={() => console.log('hello Djeronimo', task.timeId)}
+                >
                   <input
                     type="checkbox"
                     checked={task.isChecked}
@@ -45,9 +58,9 @@ class List extends Component {
                   <button onClick={() => this.props.onEdit(task.timeId)}>Cancel</button>
                 </li>
               );
-            } else
+            } else if (this.state.hoverableItem === task.timeId) {
               return (
-                <li className="tasks" key={task.timeId}>
+                <li className="tasks" key={task.timeId} onMouseLeave={this.hoverOff}>
                   <input
                     type="checkbox"
                     checked={task.isChecked}
@@ -70,6 +83,23 @@ class List extends Component {
                   >
                     Remove
                   </button>
+                </li>
+              );
+            } else
+              return (
+                <li
+                  className="tasks"
+                  key={task.timeId}
+                  onMouseEnter={() => this.hoverOn(task.timeId)}
+                >
+                  <input
+                    type="checkbox"
+                    checked={task.isChecked}
+                    onChange={e => this.props.markChecked(task.timeId, e)}
+                  />
+                  <span className={task.isDone ? 'marked-title' : 'regular-title'}>
+                    {task.task}
+                  </span>
                 </li>
               );
           }
