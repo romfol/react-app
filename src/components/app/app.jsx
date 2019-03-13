@@ -14,8 +14,10 @@ class App extends Component {
   };
 
   setEdgeTasksToShow = currentPage => {
-    const indexLastTask = currentPage * 10 - 1;
-    const indexFirstTask = indexLastTask - 9;
+    const tasksPerPage = 10;
+    const indexDifferFromFirstToLast = 9;
+    const indexLastTask = currentPage * tasksPerPage - 1;
+    const indexFirstTask = indexLastTask - indexDifferFromFirstToLast;
     this.setState({ edgeItems: { indexFirstTask, indexLastTask } });
   };
 
