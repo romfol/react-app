@@ -1,28 +1,33 @@
 .List {
   list-style-type: none;
-  padding: 0
+  padding: 0;
+  
 }
 
 .List li {
-  border-radius: 8px
+  border-radius: 8px;
 }
 
 .marked-title {
   text-decoration: line-through;
-  font-weight: 600
+  font-weight: 600;
+  word-wrap: break-word;
 }
 
 .regular-title {
   font-weight: 700;
-  font-style: oblique
+  font-style: oblique;
+  width: 10rem;
+  word-wrap: break-word;
 }
 
-.tasks {
+.task {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   background-color: rgb(35, 141, 106);
   margin-top: 1em;
   padding: 1em;
+
 }
 
 .Edit-button {
@@ -30,7 +35,8 @@
   font-weight: bold;
   border: none;
   border-radius: 5px;
-  padding: 7px 12px
+  padding: 7px 12px;
+  margin: 4px;
 }
 
 .Delete-button {
@@ -38,9 +44,10 @@
   font-weight: bold;
   border: none;
   border-radius: 5px;
-  padding: 7px 12px
+  padding: 7px 12px;
+  margin: 4px;
 }
 
-.NoTasksText {
+.No-Tasks {
   text-align: center;
 }

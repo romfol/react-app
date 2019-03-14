@@ -19,7 +19,7 @@ class List extends Component {
         {tasks.slice(indexFirstTask, indexLastTask + 1).map(task => {
           if (task.onEdit) {
             return (
-              <li className="tasks" key={task.timeId}>
+              <li className="task" key={task.timeId}>
                 <input
                   type="checkbox"
                   checked={task.isChecked}
@@ -49,13 +49,13 @@ class List extends Component {
             );
           } else
             return (
-              <li className="tasks" key={task.timeId}>
+              <li className="task" key={task.timeId}>
                 <input
                   type="checkbox"
                   checked={task.isChecked}
                   onChange={e => this.props.markChecked(task.timeId, e)}
                 />
-                <span className={task.isDone ? 'marked-title' : 'regular-title'}>{task.task}</span>
+                <div className={task.isDone ? 'marked-title' : 'regular-title'}>{task.task}</div>
                 <input
                   type="checkbox"
                   checked={task.isDone}
@@ -75,7 +75,7 @@ class List extends Component {
         })}
       </ul>
     ) : (
-      <h3 className="NoTasksText">No tasks yet</h3>
+      <h3 className="No-Tasks">No tasks yet</h3>
     );
   }
 }
