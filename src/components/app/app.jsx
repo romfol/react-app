@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { ShowingAndSortingButtons } from '../showing-sortingButtons/showing-sortingButtons';
 import List from '../list/list';
-import CheckingButtons from '../checkingButtons/checkingButtons';
+import { CheckingButtons } from '../checkingButtons/checkingButtons';
 import Pagination from '../pagination/pagination';
 
 import './styles.css';
@@ -152,39 +153,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="Showing-Buttons">
-          <h3>Show</h3>
-          <ul className="List-Show-Buttons">
-            <li>
-              <button className="Showing-Button" onClick={this.showAll}>
-                All
-              </button>
-            </li>
-            <li>
-              <button className="Showing-Button" onClick={this.showActive}>
-                Active
-              </button>
-            </li>
-            <li>
-              <button className="Showing-Button" onClick={this.showCompleted}>
-                Completed
-              </button>
-            </li>
-          </ul>
-          <h3>Sort by</h3>
-          <ul className="List-Sort-Buttons">
-            <li>
-              <button className="Sort-Button" onClick={this.sortByDate}>
-                Original order
-              </button>
-            </li>
-            <li>
-              <button className="Sort-Button" onClick={this.sortByTitle}>
-                Title
-              </button>
-            </li>
-          </ul>
-        </div>
+        <ShowingAndSortingButtons
+          showAll={this.showAll}
+          showActive={this.showActive}
+          showCompleted={this.showCompleted}
+          sortByDate={this.sortByDate}
+          sortByTitle={this.sortByTitle}
+        />
         <div>
           <h1 style={{ textAlign: 'center' }}>
             <span>TO-DO LIST</span>

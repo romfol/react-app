@@ -1,23 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import './styles.css';
 
-class CheckingButtons extends Component {
-  render() {
-    return (
-      <div className="Checking-Buttons">
-        <button className="Checking-Button" onClick={() => this.props.checkAll()}>
-          Check All
-        </button>
-        <button className="Checking-Button" onClick={() => this.props.uncheckAll()}>
-          Uncheck All
-        </button>
-        <button className="Checking-Button" onClick={() => this.props.deleteChecked()}>
-          Delete Selected
-        </button>
-      </div>
-    );
-  }
-}
-
-export default CheckingButtons;
+export const CheckingButtons = props => {
+  return (
+    <div className="Checking-Buttons">
+      <button className="Checking-Button" onClick={() => props.checkAll()}>
+        Check All
+      </button>
+      <button className="Checking-Button" onClick={() => props.uncheckAll()}>
+        Uncheck All
+      </button>
+      <button className="Checking-Button" onClick={() => props.deleteChecked()}>
+        Delete Selected
+      </button>
+    </div>
+  );
+};
