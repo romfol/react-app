@@ -76,7 +76,7 @@ class App extends Component {
   };
 
   uncheckAll = () => {
-    const uncheckedAll = this.state.tasks.slice();
+    const uncheckedAll = [...this.state.tasks];
     uncheckedAll.forEach((item, i) => {
       uncheckedAll[i].isChecked = false;
     });
@@ -84,7 +84,7 @@ class App extends Component {
   };
 
   checkAll = () => {
-    const checkedAll = this.state.tasks.slice();
+    const checkedAll = [...this.state.tasks];
     checkedAll.forEach((item, i) => {
       checkedAll[i].isChecked = true;
     });
@@ -94,7 +94,7 @@ class App extends Component {
   submitChangeTask = (newTask, id) => {
     this.state.tasks.forEach((task, i) => {
       if (task.timeId === id) {
-        const newTasks = this.state.tasks.slice();
+        const newTasks = [...this.state.tasks];
         newTasks[i].task = newTask;
         newTasks[i].onEdit = !newTasks[i].onEdit;
         this.setState({ tasks: newTasks });
