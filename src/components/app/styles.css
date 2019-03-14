@@ -3,8 +3,9 @@
   justify-content: space-evenly;
 }
 
-.title {
-  font-size: 3em;
+.Title {
+  text-align: center;
+  
 }
 
 .Input {

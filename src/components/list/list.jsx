@@ -75,7 +75,7 @@ class List extends Component {
         })}
       </ul>
     ) : (
-      <h3 style={{ textAlign: 'center' }}>No tasks yet</h3>
+      <h3 className="NoTasksText">No tasks yet</h3>
     );
   }
 }

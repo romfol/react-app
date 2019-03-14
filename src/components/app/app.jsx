@@ -161,7 +161,7 @@ class App extends Component {
           sortByTitle={this.sortByTitle}
         />
         <div>
-          <h1 style={{ textAlign: 'center' }}>
+          <h1 className="Title">
             <span>TO-DO LIST</span>
           </h1>
           <form onSubmit={this.handleSubmit}>
