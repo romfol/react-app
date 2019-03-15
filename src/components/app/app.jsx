@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { ShowingAndSortingButtons } from '../showing-sortingButtons/showing-sortingButtons';
 import List from '../list/list';
-import CheckingButtons from '../checkingButtons/checkingButtons';
+import { CheckingButtons } from '../checkingButtons/checkingButtons';
 import Pagination from '../pagination/pagination';
 
 import './styles.css';
@@ -15,8 +16,10 @@ class App extends Component {
   };
 
   setEdgeTasksToShow = currentPage => {
-    const indexLastTask = currentPage * 10 - 1;
-    const indexFirstTask = indexLastTask - 9;
+    const tasksPerPage = 10;
+    const indexDifferFromFirstToLast = 9;
+    const indexLastTask = currentPage * tasksPerPage - 1;
+    const indexFirstTask = indexLastTask - indexDifferFromFirstToLast;
     this.setState({ edgeItems: { indexFirstTask, indexLastTask } });
   };
 
@@ -74,7 +77,7 @@ class App extends Component {
   };
 
   uncheckAll = () => {
-    const uncheckedAll = this.state.tasks.slice();
+    const uncheckedAll = [...this.state.tasks];
     uncheckedAll.forEach((item, i) => {
       uncheckedAll[i].isChecked = false;
     });
@@ -82,7 +85,7 @@ class App extends Component {
   };
 
   checkAll = () => {
-    const checkedAll = this.state.tasks.slice();
+    const checkedAll = [...this.state.tasks];
     checkedAll.forEach((item, i) => {
       checkedAll[i].isChecked = true;
     });
@@ -92,7 +95,7 @@ class App extends Component {
   submitChangeTask = (newTask, id) => {
     this.state.tasks.forEach((task, i) => {
       if (task.timeId === id) {
-        const newTasks = this.state.tasks.slice();
+        const newTasks = [...this.state.tasks];
         newTasks[i].task = newTask;
         newTasks[i].onEdit = !newTasks[i].onEdit;
         this.setState({ tasks: newTasks });
@@ -151,41 +154,15 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="Showing-Buttons">
-          <h3>Show</h3>
-          <ul className="List-Show-Buttons">
-            <li>
-              <button className="Showing-Button" onClick={this.showAll}>
-                All
-              </button>
-            </li>
-            <li>
-              <button className="Showing-Button" onClick={this.showActive}>
-                Active
-              </button>
-            </li>
-            <li>
-              <button className="Showing-Button" onClick={this.showCompleted}>
-                Completed
-              </button>
-            </li>
-          </ul>
-          <h3>Sort by</h3>
-          <ul className="List-Sort-Buttons">
-            <li>
-              <button className="Sort-Button" onClick={this.sortByDate}>
-                Original order
-              </button>
-            </li>
-            <li>
-              <button className="Sort-Button" onClick={this.sortByTitle}>
-                Title
-              </button>
-            </li>
-          </ul>
-        </div>
+        <ShowingAndSortingButtons
+          showAll={this.showAll}
+          showActive={this.showActive}
+          showCompleted={this.showCompleted}
+          sortByDate={this.sortByDate}
+          sortByTitle={this.sortByTitle}
+        />
         <div>
-          <h1 style={{ textAlign: 'center' }}>
+          <h1 className="Title">
             <span>TO-DO LIST</span>
           </h1>
           <form onSubmit={this.handleSubmit}>
