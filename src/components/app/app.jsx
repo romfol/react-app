@@ -86,8 +86,12 @@ class App extends Component {
 
   checkAll = () => {
     const checkedAll = [...this.state.tasks];
+    const { indexFirstTask, indexLastTask } = this.state.edgeItems;
+
     checkedAll.forEach((item, i) => {
-      checkedAll[i].isChecked = true;
+      if (i >= indexFirstTask && i <= indexLastTask) {
+        checkedAll[i].isChecked = true;
+      }
     });
     this.setState({ tasks: checkedAll });
   };
