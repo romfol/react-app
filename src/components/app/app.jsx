@@ -78,8 +78,12 @@ class App extends Component {
 
   uncheckAll = () => {
     const uncheckedAll = [...this.state.tasks];
+    const { indexFirstTask, indexLastTask } = this.state.edgeItems;
+
     uncheckedAll.forEach((item, i) => {
-      uncheckedAll[i].isChecked = false;
+      if (i >= indexFirstTask && i <= indexLastTask) {
+        uncheckedAll[i].isChecked = false;
+      }
     });
     this.setState({ tasks: uncheckedAll });
   };

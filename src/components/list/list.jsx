@@ -10,6 +10,14 @@ class List extends Component {
     });
   };
 
+  editTitle = (id, title) => {
+    this.setState({
+      value: title,
+    });
+
+    this.props.onEdit(id);
+  };
+
   hoverOn = id => {
     this.setState({ hoverableItem: id });
   };
@@ -64,7 +72,10 @@ class List extends Component {
                   checked={task.isDone}
                   onChange={e => this.props.markTask(task.timeId, e)}
                 />
-                <button className="Edit-button" onClick={() => this.props.onEdit(task.timeId)}>
+                <button
+                  className="Edit-button"
+                  onClick={() => this.editTitle(task.timeId, task.task)}
+                >
                   Edit
                 </button>
                 <button
