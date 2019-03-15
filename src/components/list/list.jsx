@@ -10,9 +10,18 @@ class List extends Component {
     });
   };
 
+  // componentDidUpdate(prevProps) {
+  //   // Typical usage (don't forget to compare props):
+  //   if (this.props.filteredTasks !== prevProps.filteredTasks) {
+  //     this.forceUpdate()
+  //   }
+  // }
+
   render() {
     const { indexFirstTask, indexLastTask } = this.props.edgeItems;
     const tasks = this.props.showFiltered ? this.props.filteredTasks : this.props.tasks;
+
+    console.log(this.props.filteredTasks, '1221');
 
     return tasks.length ? (
       <ul className="List">
@@ -21,6 +30,7 @@ class List extends Component {
             return (
               <li className="task" key={task.timeId}>
                 <input
+                  className="done-checkbox"
                   type="checkbox"
                   checked={task.isChecked}
                   onChange={e => this.props.markChecked(task.timeId, e)}
@@ -30,8 +40,10 @@ class List extends Component {
                   placeholder="New task..."
                   value={this.state.value}
                   onChange={this.handleChange}
+                  required
                 />
                 <input
+                  className="done-checkbox"
                   type="checkbox"
                   checked={task.isDone}
                   onChange={e => this.props.markTask(task.timeId, e)}
@@ -52,11 +64,13 @@ class List extends Component {
               <li className="task" key={task.timeId}>
                 <input
                   type="checkbox"
+                  className="done-checkbox"
                   checked={task.isChecked}
                   onChange={e => this.props.markChecked(task.timeId, e)}
                 />
                 <div className={task.isDone ? 'marked-title' : 'regular-title'}>{task.task}</div>
                 <input
+                  className="done-checkbox"
                   type="checkbox"
                   checked={task.isDone}
                   onChange={e => this.props.markTask(task.timeId, e)}

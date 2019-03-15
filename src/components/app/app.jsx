@@ -61,7 +61,7 @@ class App extends Component {
   markChecked = (id, e) => {
     this.state.tasks.forEach((task, i) => {
       if (task.timeId === id) {
-        const markedTask = this.state.tasks.slice();
+        const markedTask = [...this.state.tasks];
         markedTask[i].isChecked = e.target.checked;
         this.setState({ tasks: markedTask });
       }
@@ -151,6 +151,7 @@ class App extends Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <div className="App">
         <ShowingAndSortingButtons

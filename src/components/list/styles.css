@@ -11,7 +11,10 @@
 .marked-title {
   text-decoration: line-through;
   font-weight: 600;
+  width: 10rem;
   word-wrap: break-word;
+  padding-top:  0.4rem;
+  padding-left: 0.1rem;
 }
 
 .regular-title {
@@ -19,6 +22,8 @@
   font-style: oblique;
   width: 10rem;
   word-wrap: break-word;
+  padding-top:  0.4rem;
+  padding-left: 0.1rem;
 }
 
 .task {
@@ -48,6 +53,9 @@
   margin: 4px;
 }
 
+.done-checkbox {
+  margin-top: 0.8rem;
+}
 .No-Tasks {
   text-align: center;
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import './styles.css';
 
 export const CheckingButtons = props => {
@@ -8,6 +7,7 @@ export const CheckingButtons = props => {
       <button className="Checking-Button" onClick={props.checkAll}>
         Check All
       </button>
+
       <button className="Checking-Button" onClick={props.uncheckAll}>
         Uncheck All
       </button>
