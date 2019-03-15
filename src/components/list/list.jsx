@@ -14,7 +14,6 @@ class List extends Component {
     this.setState({
       value: title,
     });
-
     this.props.onEdit(id);
   };
 
@@ -35,7 +34,11 @@ class List extends Component {
         {tasks.slice(indexFirstTask, indexLastTask + 1).map(task => {
           if (task.onEdit) {
             return (
-              <li className="tasks" key={task.timeId}>
+              <li
+                className="tasks"
+                key={task.timeId}
+                onMouseLeave={() => this.props.onEdit(task.timeId)}
+              >
                 <input
                   type="checkbox"
                   checked={task.isChecked}
