@@ -25,9 +25,21 @@ class List extends Component {
     this.setState({ hoverableItem: null });
   };
 
+  //Number.isInteger(this.props.tasks.length / 10)
+
+  componentDidUpdate(prevProps) {
+    const { indexFirstTask, indexLastTask } = this.props.edgeItems;
+    if (this.props.tasks.length - 1 < indexFirstTask && this.props.tasks.length) {
+      console.log('111111111', indexFirstTask);
+    }
+  }
+
   render() {
     const { indexFirstTask, indexLastTask } = this.props.edgeItems;
     const tasks = this.props.showFiltered ? this.props.filteredTasks : this.props.tasks;
+
+    // console.log(this.props.edgeItems);
+    // console.log(this.props);
 
     return tasks.length ? (
       <ul className="List">
@@ -55,10 +67,15 @@ class List extends Component {
                   checked={task.isDone}
                   onChange={e => this.props.markTask(task.timeId, e)}
                 />
-                <button onClick={() => this.props.submitChangeTask(this.state.value, task.timeId)}>
+                <button
+                  className="Edit-button"
+                  onClick={() => this.props.submitChangeTask(this.state.value, task.timeId)}
+                >
                   Save
                 </button>
-                <button onClick={() => this.props.onEdit(task.timeId)}>Cancel</button>
+                <button className="Delete-button" onClick={() => this.props.onEdit(task.timeId)}>
+                  Cancel
+                </button>
               </li>
             );
           } else if (this.state.hoverableItem === task.timeId) {
@@ -101,7 +118,9 @@ class List extends Component {
                   checked={task.isChecked}
                   onChange={e => this.props.markChecked(task.timeId, e)}
                 />
-                <span className={task.isDone ? 'marked-title' : 'regular-title'}>{task.task}</span>
+                <span className={task.isDone ? 'marked-title wide' : 'regular-title wide'}>
+                  {task.task}
+                </span>
               </li>
             );
         })}
