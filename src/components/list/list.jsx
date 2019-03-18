@@ -27,10 +27,12 @@ class List extends Component {
 
   //Number.isInteger(this.props.tasks.length / 10)
 
-  componentDidUpdate(prevProps) {
-    const { indexFirstTask, indexLastTask } = this.props.edgeItems;
-    if (this.props.tasks.length - 1 < indexFirstTask && this.props.tasks.length) {
-      console.log('111111111', indexFirstTask);
+  componentDidUpdate() {
+    if (
+      this.props.tasks.length - 1 < this.props.edgeItems.indexFirstTask &&
+      this.props.tasks.length
+    ) {
+      this.props.setEdgeTasksToShow(1);
     }
   }
 

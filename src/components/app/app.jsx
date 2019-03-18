@@ -131,7 +131,7 @@ class App extends Component {
   markTask = (id, e) => {
     this.state.tasks.forEach((task, i) => {
       if (task.timeId === id) {
-        const markedTasks = this.state.tasks.slice();
+        const markedTasks = [...this.state.tasks];
         markedTasks[i].isDone = e.target.checked;
         this.setState({ tasks: markedTasks });
       }
@@ -192,6 +192,7 @@ class App extends Component {
             uncheckAll={this.uncheckAll}
           />
           <List
+            setEdgeTasksToShow={this.setEdgeTasksToShow}
             edgeItems={this.state.edgeItems}
             tasks={this.state.tasks}
             showFiltered={this.state.showFiltered}
