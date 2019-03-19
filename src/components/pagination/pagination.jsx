@@ -3,7 +3,7 @@ import './styles.css';
 
 class Pagination extends Component {
   state = {
-    activeButton: 0,
+    activeButton: 1,
   };
 
   handleClick = e => {
@@ -13,7 +13,7 @@ class Pagination extends Component {
   };
 
   render() {
-    const { tasks } = this.props;
+    const tasks = this.props.showFiltered ? this.props.filteredTasks : this.props.tasks;
 
     return tasks.length > 10 ? (
       <div className="Container-List">

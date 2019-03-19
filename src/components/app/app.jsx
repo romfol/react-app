@@ -15,7 +15,7 @@ class App extends Component {
     edgeItems: { indexFirstTask: 0, indexLastTask: 9 },
   };
 
-  setEdgeTasksToShow = currentPage => {
+  setEdgeTasksToShow = (currentPage = 1) => {
     const tasksPerPage = 10;
     const indexDifferFromFirstToLast = 9;
     const indexLastTask = currentPage * tasksPerPage - 1;
@@ -32,8 +32,8 @@ class App extends Component {
   sortByTitle = () => {
     const sortedTasks = [...this.state.tasks];
     sortedTasks.sort((a, b) => {
-      let taskA = a.task.toUpperCase();
-      var taskB = b.task.toUpperCase();
+      const taskA = a.task.toUpperCase();
+      const taskB = b.task.toUpperCase();
       if (taskA < taskB) {
         return -1;
       }
@@ -204,7 +204,12 @@ class App extends Component {
             cancelChangeTask={this.cancelChangeTask}
             markChecked={this.markChecked}
           />
-          <Pagination tasks={this.state.tasks} setEdgeTasksToShow={this.setEdgeTasksToShow} />
+          <Pagination
+            tasks={this.state.tasks}
+            setEdgeTasksToShow={this.setEdgeTasksToShow}
+            showFiltered={this.state.showFiltered}
+            filteredTasks={this.state.filteredTasks}
+          />
         </div>
       </div>
     );
