@@ -183,7 +183,7 @@ class App extends Component {
 
     this.setState({
       tasks: [
-        this.state.tasks,
+        ...this.state.tasks,
         {
           task: this.state.value,
           timeId: +new Date(),
