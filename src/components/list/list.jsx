@@ -27,15 +27,25 @@ class List extends Component {
 
   //Number.isInteger(this.props.tasks.length / 10)
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const { tasks, setEdgeTasksToShow, showFiltered, filteredTasks, edgeItems } = this.props;
-    if (tasks.length - 1 < edgeItems.indexFirstTask && tasks.length) {
+
+    if (tasks.length && tasks.length - 1 < edgeItems.indexFirstTask) {
       setEdgeTasksToShow();
     }
 
-    if (showFiltered && filteredTasks.length - 1 < edgeItems.indexFirstTask) {
+    if (
+      showFiltered &&
+      filteredTasks.length &&
+      filteredTasks.length - 1 < edgeItems.indexFirstTask
+    ) {
       setEdgeTasksToShow();
     }
+
+    // if (this.props.tasks !== prevProps.tasks) {
+    //   console.log('111', prevProps.filteredTasks, this.props.filteredTasks);
+    //   //this.forceUpdate();
+    // }
   }
 
   render() {
