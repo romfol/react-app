@@ -81,6 +81,8 @@ class App extends Component {
   deleteChecked = () => {
     const newFilteredTasks = [...this.state.filteredTasks].filter(task => !task.isChecked);
     const newTasks = [...this.state.tasks].filter(task => !task.isChecked);
+
+    console.log(newFilteredTasks, newTasks);
     this.setState({
       tasks: newTasks,
       filteredTasks: newFilteredTasks,
@@ -180,13 +182,16 @@ class App extends Component {
     e.preventDefault();
 
     this.setState({
-      tasks: this.state.tasks.concat({
-        task: this.state.value,
-        timeId: +new Date(),
-        isDone: false,
-        onEdit: false,
-        isChecked: false,
-      }),
+      tasks: [
+        this.state.tasks,
+        {
+          task: this.state.value,
+          timeId: +new Date(),
+          isDone: false,
+          onEdit: false,
+          isChecked: false,
+        },
+      ],
       value: '',
     });
   };
