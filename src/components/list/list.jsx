@@ -46,13 +46,9 @@ class List extends Component {
     return tasks.length ? (
       <ul className="List">
         {tasks.slice(indexFirstTask, indexLastTask + 1).map(task => {
-          if (task.onEdit) {
+          if (task.timeId === this.props.onEditItem) {
             return (
-              <li
-                className="tasks"
-                key={task.timeId}
-                onMouseLeave={() => this.props.onEdit(task.timeId)}
-              >
+              <li className="tasks" key={task.timeId} onMouseLeave={this.props.notOnEdit}>
                 <input
                   type="checkbox"
                   checked={task.isChecked}
@@ -75,7 +71,7 @@ class List extends Component {
                 >
                   Save
                 </button>
-                <button className="Delete-button" onClick={() => this.props.onEdit(task.timeId)}>
+                <button className="Delete-button" onClick={this.props.notOnEdit}>
                   Cancel
                 </button>
               </li>

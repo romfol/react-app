@@ -13,6 +13,7 @@ class App extends Component {
     showFiltered: false,
     filteredTasks: [],
     edgeItems: { indexFirstTask: 0, indexLastTask: 9 },
+    onEdit: 0,
   };
 
   setEdgeTasksToShow = (currentPage = 1) => {
@@ -137,19 +138,20 @@ class App extends Component {
       if (task.timeId === id) {
         const newTasks = [...this.state.tasks];
         newTasks[i].task = newTask;
-        newTasks[i].onEdit = !newTasks[i].onEdit;
-        this.setState({ tasks: newTasks });
+        this.setState({ tasks: newTasks, onEdit: 0 });
       }
     });
   };
 
+  notOnEdit = () => {
+    this.setState({
+      onEdit: 0,
+    });
+  };
+
   onEdit = id => {
-    this.state.tasks.forEach((task, i) => {
-      if (task.timeId === id) {
-        const editingTasks = [...this.state.tasks];
-        editingTasks[i].onEdit = !editingTasks[i].onEdit;
-        this.setState({ tasks: editingTasks });
-      }
+    this.setState({
+      onEdit: id,
     });
   };
 
@@ -188,10 +190,10 @@ class App extends Component {
           task: this.state.value,
           timeId: +new Date(),
           isDone: false,
-          onEdit: false,
           isChecked: false,
         },
       ],
+      onEdit: 0,
       value: '',
     });
   };
@@ -229,6 +231,8 @@ class App extends Component {
             uncheckAll={this.uncheckAll}
           />
           <List
+            notOnEdit={this.notOnEdit}
+            onEditItem={this.state.onEdit}
             setEdgeTasksToShow={this.setEdgeTasksToShow}
             edgeItems={this.state.edgeItems}
             tasks={this.state.tasks}
