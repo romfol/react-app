@@ -25,15 +25,11 @@ class List extends Component {
     this.setState({ hoverableItem: null });
   };
 
-  //Number.isInteger(this.props.tasks.length / 10)
-
   componentDidUpdate(prevProps) {
     const { tasks, setEdgeTasksToShow, showFiltered, filteredTasks, edgeItems } = this.props;
-
     if (tasks.length && tasks.length - 1 < edgeItems.indexFirstTask) {
       setEdgeTasksToShow();
     }
-
     if (
       showFiltered &&
       filteredTasks.length &&
@@ -41,19 +37,11 @@ class List extends Component {
     ) {
       setEdgeTasksToShow();
     }
-
-    // if (this.props.tasks !== prevProps.tasks) {
-    //   console.log('111', prevProps.filteredTasks, this.props.filteredTasks);
-    //   //this.forceUpdate();
-    // }
   }
 
   render() {
     const { indexFirstTask, indexLastTask } = this.props.edgeItems;
     const tasks = this.props.showFiltered ? this.props.filteredTasks : this.props.tasks;
-
-    // console.log(this.props.edgeItems);
-    // console.log(this.props);
 
     return tasks.length ? (
       <ul className="List">

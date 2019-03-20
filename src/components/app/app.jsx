@@ -81,8 +81,6 @@ class App extends Component {
   deleteChecked = () => {
     const newFilteredTasks = [...this.state.filteredTasks].filter(task => !task.isChecked);
     const newTasks = [...this.state.tasks].filter(task => !task.isChecked);
-
-    console.log(newFilteredTasks, newTasks);
     this.setState({
       tasks: newTasks,
       filteredTasks: newFilteredTasks,
