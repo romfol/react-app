@@ -42,7 +42,7 @@ class List extends Component {
   render() {
     const { indexFirstTask, indexLastTask } = this.props.edgeItems;
     const tasks = this.props.showFiltered ? this.props.filteredTasks : this.props.tasks;
-
+    console.log(this.props.isChecked);
     return tasks.length ? (
       <ul className="List">
         {tasks.slice(indexFirstTask, indexLastTask + 1).map(task => {
@@ -51,7 +51,7 @@ class List extends Component {
               <li className="tasks" key={task.timeId} onMouseLeave={this.props.notOnEdit}>
                 <input
                   type="checkbox"
-                  checked={task.isChecked}
+                  checked={this.props.isChecked.includes(task.timeId)}
                   onChange={e => this.props.markChecked(task.timeId, e)}
                 />
                 <input
@@ -81,7 +81,7 @@ class List extends Component {
               <li className="tasks" key={task.timeId} onMouseLeave={this.hoverOff}>
                 <input
                   type="checkbox"
-                  checked={task.isChecked}
+                  checked={this.props.isChecked.includes(task.timeId)}
                   onChange={e => this.props.markChecked(task.timeId, e)}
                 />
                 <span className={task.isDone ? 'marked-title' : 'regular-title'}>{task.task}</span>
@@ -113,7 +113,7 @@ class List extends Component {
               >
                 <input
                   type="checkbox"
-                  checked={task.isChecked}
+                  checked={this.props.isChecked.includes(task.timeId)}
                   onChange={e => this.props.markChecked(task.timeId, e)}
                 />
                 <span className={task.isDone ? 'marked-title wide' : 'regular-title wide'}>

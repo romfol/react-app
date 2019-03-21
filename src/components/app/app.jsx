@@ -14,6 +14,7 @@ class App extends Component {
     filteredTasks: [],
     edgeItems: { indexFirstTask: 0, indexLastTask: 9 },
     onEdit: 0,
+    isChecked: [],
   };
 
   setEdgeTasksToShow = (currentPage = 1) => {
@@ -69,21 +70,19 @@ class App extends Component {
     this.setState({ showFiltered: true, filteredTasks: completedTasks });
   };
 
-  markChecked = (id, e) => {
-    this.state.tasks.forEach((task, i) => {
-      if (task.timeId === id) {
-        const markedTask = [...this.state.tasks];
-        markedTask[i].isChecked = e.target.checked;
-        this.setState({ tasks: markedTask });
-      }
-    });
+  markChecked = id => {
+    const  checked  = [...this.state.isChecked];
+    if (!checked.includes(id)) {
+      this.setState({ isChecked: [...checked, id] });
+    } else {
+      checked.splice(checked.indexOf(id), 1)
+      this.setState({ isChecked: checked });
+    }
   };
 
   deleteChecked = () => {
     const newFilteredTasks = [...this.state.filteredTasks].filter(task => !task.isChecked);
     const newTasks = [...this.state.tasks].filter(task => !task.isChecked);
-
-    console.log(newFilteredTasks, newTasks);
     this.setState({
       tasks: newTasks,
       filteredTasks: newFilteredTasks,
@@ -190,10 +189,10 @@ class App extends Component {
           task: this.state.value,
           timeId: +new Date(),
           isDone: false,
-          isChecked: false,
         },
       ],
       onEdit: 0,
+      isChecked: [],
       value: '',
     });
   };
@@ -231,6 +230,7 @@ class App extends Component {
             uncheckAll={this.uncheckAll}
           />
           <List
+            isChecked={this.state.isChecked}
             notOnEdit={this.notOnEdit}
             onEditItem={this.state.onEdit}
             setEdgeTasksToShow={this.setEdgeTasksToShow}
