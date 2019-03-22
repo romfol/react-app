@@ -124,36 +124,37 @@ class App extends Component {
 
   uncheckAll = () => {
     const { indexFirstTask, indexLastTask } = this.state.edgeItems;
-    if (!this.state.showFiltered) {
-      const uncheckedAll = [...this.state.tasks];
+    const items = [...this.state.filteredItems];
 
-      uncheckedAll.forEach((item, i) => {
-        if (i >= indexFirstTask && i <= indexLastTask) {
-          uncheckedAll[i].isChecked = false;
-        }
-      });
-      this.setState({ tasks: uncheckedAll });
-    } else {
-      const uncheckedAll = [...this.state.filteredTasks];
-      uncheckedAll.forEach((item, i) => {
-        if (i >= indexFirstTask && i <= indexLastTask) {
-          uncheckedAll[i].isChecked = false;
-        }
-      });
-      this.setState({ filteredTasks: uncheckedAll });
-    }
+    const unCheckedItems = [];
+    items.forEach((item, i) => {
+      if (
+        i >= indexFirstTask &&
+        i <= indexLastTask
+        // &&
+        // !this.state.isChecked.includes(item.timeId)
+      ) {
+        checkedItems.push(items[i].timeId);
+      }
+    });
+    this.setState({ isChecked: [...this.state.isChecked, ...checkedItems] });
   };
 
   checkAll = () => {
     const { indexFirstTask, indexLastTask } = this.state.edgeItems;
+    const items = [...this.state.filteredItems];
 
-    const checkedAll = [...this.state.filteredItems];
-    checkedAll.forEach((item, i) => {
-      if (i >= indexFirstTask && i <= indexLastTask) {
-        checkedAll[i].isChecked = true;
+    const checkedItems = [];
+    items.forEach((item, i) => {
+      if (
+        i >= indexFirstTask &&
+        i <= indexLastTask &&
+        !this.state.isChecked.includes(item.timeId)
+      ) {
+        checkedItems.push(items[i].timeId);
       }
     });
-    this.setState({ filteredItems: checkedAll });
+    this.setState({ isChecked: [...this.state.isChecked, ...checkedItems] });
   };
 
   submitChangeTask = (newTask, id) => {
