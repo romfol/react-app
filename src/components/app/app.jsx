@@ -9,12 +9,89 @@ import './styles.css';
 class App extends Component {
   state = {
     value: '',
-    tasks: [],
-    showFiltered: false,
-    filteredTasks: [],
+    tasks: [
+      {
+        task: 'Buy horse',
+        timeId: 1553171609032,
+        isDone: false,
+      },
+      {
+        task: 'Become markup developer',
+        timeId: 1553171609040,
+        isDone: true,
+      },
+      {
+        task: 'Learn pixel perfect',
+        timeId: 1553171609050,
+        isDone: false,
+      },
+      {
+        task: 'Master fluent English',
+        timeId: 1553171609060,
+        isDone: true,
+      },
+      {
+        task: 'Run 40000 meters and not die',
+        timeId: 1553171609070,
+        isDone: false,
+      },
+      {
+        task: 'Become React Jedy',
+        timeId: 1553171609080,
+        isDone: true,
+      },
+      {
+        task: 'Take out garbage',
+        timeId: 1553171609090,
+        isDone: false,
+      },
+      {
+        task: 'Play soccer',
+        timeId: 1553171609100,
+        isDone: true,
+      },
+      {
+        task: 'Write message on Instagram',
+        timeId: 1553171609110,
+        isDone: false,
+      },
+      {
+        task: 'Move tables',
+        timeId: 1553171609120,
+        isDone: true,
+      },
+      {
+        task: 'Win on ping-pong ',
+        timeId: 1553171609130,
+        isDone: false,
+      },
+      {
+        task: 'Jump over the rainbow',
+        timeId: 1553171609140,
+        isDone: false,
+      },
+      {
+        task: 'Be ace',
+        timeId: 1553171609150,
+        isDone: true,
+      },
+      {
+        task: 'Finish to-do list',
+        timeId: 1553171609160,
+        isDone: false,
+      },
+      {
+        task: "Don't miss any lefted Champions League match",
+        timeId: 1553171609170,
+        isDone: true,
+      },
+    ],
+    filteredItems: [],
     edgeItems: { indexFirstTask: 0, indexLastTask: 9 },
     onEdit: 0,
     isChecked: [],
+    showActive: false,
+    showCompleted: false,
   };
 
   setEdgeTasksToShow = (currentPage = 1) => {
@@ -57,25 +134,25 @@ class App extends Component {
   };
 
   showAll = () => {
-    this.setState({ showFiltered: false });
+    this.setState({ showCompleted: false });
   };
 
   showActive = () => {
     const activeTasks = this.state.tasks.filter(task => !task.isDone);
-    this.setState({ showFiltered: true, filteredTasks: activeTasks });
+    this.setState({ filteredItems: activeTasks });
   };
 
   showCompleted = () => {
     const completedTasks = this.state.tasks.filter(task => task.isDone);
-    this.setState({ showFiltered: true, filteredTasks: completedTasks });
+    this.setState({ filteredItems: completedTasks });
   };
 
   markChecked = id => {
-    const  checked  = [...this.state.isChecked];
+    const checked = [...this.state.isChecked];
     if (!checked.includes(id)) {
       this.setState({ isChecked: [...checked, id] });
     } else {
-      checked.splice(checked.indexOf(id), 1)
+      checked.splice(checked.indexOf(id), 1);
       this.setState({ isChecked: checked });
     }
   };
@@ -173,6 +250,17 @@ class App extends Component {
     });
   };
 
+  showProcessedResult = () => {
+    this.setState({
+      filteredItems: this.state.tasks,
+    });
+    if (this.state.showActive) {
+      this.showActive();
+    } else if (this.state.showCompleted) {
+      this.showCompleted();
+    }
+  };
+
   handleChange = e => {
     this.setState({
       value: e.target.value,
@@ -182,28 +270,44 @@ class App extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    this.setState({
-      tasks: [
-        ...this.state.tasks,
-        {
-          task: this.state.value,
-          timeId: +new Date(),
-          isDone: false,
-        },
-      ],
-      onEdit: 0,
-      isChecked: [],
-      value: '',
-    });
+    this.setState(
+      {
+        tasks: [
+          ...this.state.tasks,
+          {
+            task: this.state.value,
+            timeId: +new Date(),
+            isDone: false,
+          },
+        ],
+        onEdit: null,
+        isChecked: [],
+        value: '',
+      },
+      () => this.showProcessedResult()
+    );
+    console.log(this.state);
   };
 
   render() {
     return (
       <div className="App">
         <ShowingAndSortingButtons
-          showAll={this.showAll}
-          showActive={this.showActive}
-          showCompleted={this.showCompleted}
+          showingAll={() =>
+            this.setState({ showActive: false, showCompleted: false }, () =>
+              this.showProcessedResult()
+            )
+          }
+          showingActive={() =>
+            this.setState({ showActive: true, showCompleted: false }, () =>
+              this.showProcessedResult()
+            )
+          }
+          showingCompleted={() =>
+            this.setState({ showActive: false, showCompleted: true }, () =>
+              this.showProcessedResult()
+            )
+          }
           sortByDate={this.sortByDate}
           sortByTitle={this.sortByTitle}
         />
@@ -230,14 +334,14 @@ class App extends Component {
             uncheckAll={this.uncheckAll}
           />
           <List
+            items={this.state.tasks}
+            showProcessedResult={this.showProcessedResult}
             isChecked={this.state.isChecked}
             notOnEdit={this.notOnEdit}
             onEditItem={this.state.onEdit}
             setEdgeTasksToShow={this.setEdgeTasksToShow}
             edgeItems={this.state.edgeItems}
-            tasks={this.state.tasks}
-            showFiltered={this.state.showFiltered}
-            filteredTasks={this.state.filteredTasks}
+            filteredItems={this.state.filteredItems}
             removeTask={this.removeTask}
             markTask={this.markTask}
             onEdit={this.onEdit}
@@ -246,10 +350,8 @@ class App extends Component {
             markChecked={this.markChecked}
           />
           <Pagination
-            tasks={this.state.tasks}
             setEdgeTasksToShow={this.setEdgeTasksToShow}
-            showFiltered={this.state.showFiltered}
-            filteredTasks={this.state.filteredTasks}
+            filteredItems={this.state.filteredItems}
           />
         </div>
       </div>

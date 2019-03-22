@@ -24,28 +24,37 @@ class List extends Component {
   hoverOff = () => {
     this.setState({ hoverableItem: null });
   };
-
-  componentDidUpdate(prevProps) {
-    const { tasks, setEdgeTasksToShow, showFiltered, filteredTasks, edgeItems } = this.props;
-    if (tasks.length && tasks.length - 1 < edgeItems.indexFirstTask) {
-      setEdgeTasksToShow();
-    }
-    if (
-      showFiltered &&
-      filteredTasks.length &&
-      filteredTasks.length - 1 < edgeItems.indexFirstTask
-    ) {
-      setEdgeTasksToShow();
-    }
+  // just for testing purpose
+  componentDidMount() {
+    this.props.showProcessedResult();
   }
+
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.items !== this.props.items) {
+  //     this.props.showProcessedResult();
+  //   }
+  // }
+  // componentDidUpdate(prevProps) {
+  //   const { tasks, setEdgeTasksToShow, showFiltered, filteredTasks, edgeItems } = this.props;
+  //   if (tasks.length && tasks.length - 1 < edgeItems.indexFirstTask) {
+  //     setEdgeTasksToShow();
+  //   }
+  //   if (
+  //     showFiltered &&
+  //     filteredTasks.length &&
+  //     filteredTasks.length - 1 < edgeItems.indexFirstTask
+  //   ) {
+  //     setEdgeTasksToShow();
+  //   }
+  // }
 
   render() {
     const { indexFirstTask, indexLastTask } = this.props.edgeItems;
-    const tasks = this.props.showFiltered ? this.props.filteredTasks : this.props.tasks;
-    console.log(this.props.isChecked);
-    return tasks.length ? (
+    const { filteredItems } = this.props;
+
+    return filteredItems.length ? (
       <ul className="List">
-        {tasks.slice(indexFirstTask, indexLastTask + 1).map(task => {
+        {filteredItems.slice(indexFirstTask, indexLastTask + 1).map(task => {
           if (task.timeId === this.props.onEditItem) {
             return (
               <li className="tasks" key={task.timeId} onMouseLeave={this.props.notOnEdit}>
