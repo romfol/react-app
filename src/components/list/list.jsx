@@ -24,7 +24,7 @@ class List extends Component {
   hoverOff = () => {
     this.setState({ hoverableItem: null });
   };
-  // just for testing purpose
+
   componentDidMount() {
     this.props.showProcessedResult();
   }

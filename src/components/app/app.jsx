@@ -92,6 +92,7 @@ class App extends Component {
     isChecked: [],
     showActive: false,
     showCompleted: false,
+    sortByTitle: false,
   };
 
   setEdgeTasksToShow = (currentPage = 1) => {
@@ -100,51 +101,6 @@ class App extends Component {
     const indexLastTask = currentPage * tasksPerPage - 1;
     const indexFirstTask = indexLastTask - indexDifferFromFirstToLast;
     this.setState({ edgeItems: { indexFirstTask, indexLastTask } });
-  };
-
-  sortByDate = () => {
-    const sortedTasks = this.state.showFiltered
-      ? [...this.state.filteredTasks]
-      : [...this.state.tasks];
-    sortedTasks.sort((a, b) => a.timeId - b.timeId);
-    this.state.showFiltered
-      ? this.setState({ filteredTasks: sortedTasks })
-      : this.setState({ tasks: sortedTasks });
-  };
-
-  sortByTitle = () => {
-    const sortedTasks = this.state.showFiltered
-      ? [...this.state.filteredTasks]
-      : [...this.state.tasks];
-    sortedTasks.sort((a, b) => {
-      const taskA = a.task.toUpperCase();
-      const taskB = b.task.toUpperCase();
-      if (taskA < taskB) {
-        return -1;
-      }
-      if (taskA > taskB) {
-        return 1;
-      }
-      return 0;
-    });
-
-    this.state.showFiltered
-      ? this.setState({ filteredTasks: sortedTasks })
-      : this.setState({ tasks: sortedTasks });
-  };
-
-  showAll = () => {
-    this.setState({ showCompleted: false });
-  };
-
-  showActive = () => {
-    const activeTasks = this.state.tasks.filter(task => !task.isDone);
-    this.setState({ filteredItems: activeTasks });
-  };
-
-  showCompleted = () => {
-    const completedTasks = this.state.tasks.filter(task => task.isDone);
-    this.setState({ filteredItems: completedTasks });
   };
 
   markChecked = id => {
@@ -190,23 +146,14 @@ class App extends Component {
 
   checkAll = () => {
     const { indexFirstTask, indexLastTask } = this.state.edgeItems;
-    if (!this.state.showFiltered) {
-      const checkedAll = [...this.state.tasks];
-      checkedAll.forEach((item, i) => {
-        if (i >= indexFirstTask && i <= indexLastTask) {
-          checkedAll[i].isChecked = true;
-        }
-      });
-      this.setState({ tasks: checkedAll });
-    } else {
-      const checkedAll = [...this.state.filteredTasks];
-      checkedAll.forEach((item, i) => {
-        if (i >= indexFirstTask && i <= indexLastTask) {
-          checkedAll[i].isChecked = true;
-        }
-      });
-      this.setState({ filteredTasks: checkedAll });
-    }
+
+    const checkedAll = [...this.state.filteredItems];
+    checkedAll.forEach((item, i) => {
+      if (i >= indexFirstTask && i <= indexLastTask) {
+        checkedAll[i].isChecked = true;
+      }
+    });
+    this.setState({ filteredItems: checkedAll });
   };
 
   submitChangeTask = (newTask, id) => {
@@ -232,12 +179,13 @@ class App extends Component {
   };
 
   removeTask = id => {
-    const newTasks = this.state.tasks.filter(task => task.timeId !== id);
-    const filteredTasks = this.state.filteredTasks.filter(task => task.timeId !== id);
-    this.setState({
-      tasks: newTasks,
-      filteredTasks,
-    });
+    const newList = this.state.tasks.filter(task => task.timeId !== id);
+    this.setState(
+      {
+        tasks: newList,
+      },
+      () => this.showProcessedResult()
+    );
   };
 
   markTask = (id, e) => {
@@ -251,14 +199,30 @@ class App extends Component {
   };
 
   showProcessedResult = () => {
-    this.setState({
-      filteredItems: this.state.tasks,
-    });
+    const allItems = [...this.state.tasks];
+
+    let filteredItems = allItems;
     if (this.state.showActive) {
-      this.showActive();
+      filteredItems = allItems.filter(task => !task.isDone);
     } else if (this.state.showCompleted) {
-      this.showCompleted();
+      filteredItems = allItems.filter(task => task.isDone);
     }
+
+    const sortedItems = filteredItems;
+    if (this.state.sortByTitle) {
+      sortedItems.sort((a, b) => {
+        const taskA = a.task.toUpperCase();
+        const taskB = b.task.toUpperCase();
+        if (taskA < taskB) {
+          return -1;
+        }
+        if (taskA > taskB) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+    this.setState({ filteredItems: sortedItems });
   };
 
   handleChange = e => {
@@ -286,7 +250,6 @@ class App extends Component {
       },
       () => this.showProcessedResult()
     );
-    console.log(this.state);
   };
 
   render() {
@@ -308,8 +271,8 @@ class App extends Component {
               this.showProcessedResult()
             )
           }
-          sortByDate={this.sortByDate}
-          sortByTitle={this.sortByTitle}
+          dateSort={() => this.setState({ sortByTitle: false }, () => this.showProcessedResult())}
+          titleSort={() => this.setState({ sortByTitle: true }, () => this.showProcessedResult())}
         />
         <div>
           <h1 className="Title">
@@ -334,7 +297,6 @@ class App extends Component {
             uncheckAll={this.uncheckAll}
           />
           <List
-            items={this.state.tasks}
             showProcessedResult={this.showProcessedResult}
             isChecked={this.state.isChecked}
             notOnEdit={this.notOnEdit}
