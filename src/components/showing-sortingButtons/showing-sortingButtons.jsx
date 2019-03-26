@@ -7,17 +7,17 @@ export const ShowingAndSortingButtons = props => {
       <h3>Show</h3>
       <ul className="List-Show-Buttons">
         <li>
-          <button className="Showing-Button" onClick={props.showAll}>
+          <button className="Showing-Button" onClick={props.showingAll}>
             All
           </button>
         </li>
         <li>
-          <button className="Showing-Button" onClick={props.showActive}>
+          <button className="Showing-Button" onClick={props.showingActive}>
             Active
           </button>
         </li>
         <li>
-          <button className="Showing-Button" onClick={props.showCompleted}>
+          <button className="Showing-Button" onClick={props.showingCompleted}>
             Completed
           </button>
         </li>
@@ -25,12 +25,12 @@ export const ShowingAndSortingButtons = props => {
       <h3>Sort by</h3>
       <ul className="List-Sort-Buttons">
         <li>
-          <button className="Sort-Button" onClick={props.sortByDate}>
+          <button className="Sort-Button" onClick={props.dateSort}>
             Original order
           </button>
         </li>
         <li>
-          <button className="Sort-Button" onClick={props.sortByTitle}>
+          <button className="Sort-Button" onClick={props.titleSort}>
             Title
           </button>
         </li>
