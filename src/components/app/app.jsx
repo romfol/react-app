@@ -97,9 +97,9 @@ class App extends Component {
 
   setEdgeTasksToShow = (currentPage = 1) => {
     const tasksPerPage = 10;
-    const indexDifferFromFirstToLast = 9;
+    const differIndexFromFirstToLast = 9;
     const indexLastTask = currentPage * tasksPerPage - 1;
-    const indexFirstTask = indexLastTask - indexDifferFromFirstToLast;
+    const indexFirstTask = indexLastTask - differIndexFromFirstToLast;
     this.setState({ edgeItems: { indexFirstTask, indexLastTask } });
   };
 
@@ -197,31 +197,72 @@ class App extends Component {
     });
   };
 
+  //for testing purpose
+  componentDidMount() {
+    this.showProcessedResult();
+  }
+
+  componentDidUpdate() {
+    const {
+      filteredItems,
+      edgeItems: { indexFirstTask },
+    } = this.state;
+    if (filteredItems.length && filteredItems.length - 1 < indexFirstTask) {
+      this.setEdgeTasksToShow();
+    }
+  }
+
+  showingAll = () => {
+    this.setState({ showActive: false, showCompleted: false }, () => this.showProcessedResult());
+  };
+
+  showingActive = () => {
+    this.setState({ showActive: true, showCompleted: false }, () => this.showProcessedResult());
+  };
+
+  showingCompleted = () => {
+    this.setState({ showActive: false, showCompleted: true }, () => this.showProcessedResult());
+  };
+  dateSort = () => {
+    this.setState({ sortByTitle: false }, () => this.showProcessedResult());
+  };
+
+  titleSort = () => {
+    this.setState({ sortByTitle: true }, () => this.showProcessedResult());
+  };
+
   showProcessedResult = () => {
-    const allItems = [...this.state.tasks];
+    const { showActive, showCompleted, sortByTitle, tasks } = this.state;
+    const allItems = [...tasks];
 
-    let filteredItems = allItems;
-    if (this.state.showActive) {
-      filteredItems = allItems.filter(task => !task.isDone);
-    } else if (this.state.showCompleted) {
-      filteredItems = allItems.filter(task => task.isDone);
+    const result = sortTasks(filterTasks(allItems, showActive, showCompleted), sortByTitle);
+
+    function filterTasks(allItems, showActive, showCompleted) {
+      if (showActive) {
+        return allItems.filter(task => !task.isDone);
+      } else if (showCompleted) {
+        return allItems.filter(task => task.isDone);
+      } else return allItems;
     }
 
-    const sortedItems = filteredItems;
-    if (this.state.sortByTitle) {
-      sortedItems.sort((a, b) => {
-        const taskA = a.task.toUpperCase();
-        const taskB = b.task.toUpperCase();
-        if (taskA < taskB) {
-          return -1;
-        }
-        if (taskA > taskB) {
-          return 1;
-        }
-        return 0;
-      });
+    function sortTasks(allItems, sortByTitle) {
+      if (sortByTitle) {
+        allItems.sort((a, b) => {
+          const taskA = a.task.toUpperCase();
+          const taskB = b.task.toUpperCase();
+          if (taskA < taskB) {
+            return -1;
+          }
+          if (taskA > taskB) {
+            return 1;
+          }
+          return 0;
+        });
+        return allItems;
+      } else return allItems;
     }
-    this.setState({ filteredItems: sortedItems });
+
+    this.setState({ filteredItems: result });
   };
 
   handleChange = e => {
@@ -255,23 +296,11 @@ class App extends Component {
     return (
       <div className="App">
         <ShowingAndSortingButtons
-          showingAll={() =>
-            this.setState({ showActive: false, showCompleted: false }, () =>
-              this.showProcessedResult()
-            )
-          }
-          showingActive={() =>
-            this.setState({ showActive: true, showCompleted: false }, () =>
-              this.showProcessedResult()
-            )
-          }
-          showingCompleted={() =>
-            this.setState({ showActive: false, showCompleted: true }, () =>
-              this.showProcessedResult()
-            )
-          }
-          dateSort={() => this.setState({ sortByTitle: false }, () => this.showProcessedResult())}
-          titleSort={() => this.setState({ sortByTitle: true }, () => this.showProcessedResult())}
+          showingAll={this.showingAll}
+          showingActive={this.showingActive}
+          showingCompleted={this.showingCompleted}
+          dateSort={this.dateSort}
+          titleSort={this.titleSort}
         />
         <div>
           <h1 className="Title">

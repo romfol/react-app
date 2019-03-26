@@ -25,32 +25,11 @@ class List extends Component {
     this.setState({ hoverableItem: null });
   };
 
-  componentDidMount() {
-    this.props.showProcessedResult();
-  }
-
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.items !== this.props.items) {
-  //     this.props.showProcessedResult();
-  //   }
-  // }
-  // componentDidUpdate(prevProps) {
-  //   const { tasks, setEdgeTasksToShow, showFiltered, filteredTasks, edgeItems } = this.props;
-  //   if (tasks.length && tasks.length - 1 < edgeItems.indexFirstTask) {
-  //     setEdgeTasksToShow();
-  //   }
-  //   if (
-  //     showFiltered &&
-  //     filteredTasks.length &&
-  //     filteredTasks.length - 1 < edgeItems.indexFirstTask
-  //   ) {
-  //     setEdgeTasksToShow();
-  //   }
-  // }
-
   render() {
-    const { indexFirstTask, indexLastTask } = this.props.edgeItems;
-    const { filteredItems } = this.props;
+    const {
+      edgeItems: { indexFirstTask, indexLastTask },
+      filteredItems,
+    } = this.props;
 
     return filteredItems.length ? (
       <ul className="List">
