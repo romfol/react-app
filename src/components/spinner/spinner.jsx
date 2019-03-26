@@ -3,8 +3,8 @@ import './styles.css';
 
 export const Spinner = () => {
   return (
-    <section className="spinner-wrapper">
-      <div className="lds-roller">
+    <div className="spinner-wrapper">
+      <section className="lds-roller">
         <div />
         <div />
         <div />
@@ -13,7 +13,7 @@ export const Spinner = () => {
         <div />
         <div />
         <div />
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
