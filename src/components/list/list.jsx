@@ -28,23 +28,31 @@ class List extends Component {
 
   render() {
     const {
-      loading,
+      loaded,
       edgeItems: { indexFirstTask, indexLastTask },
       filteredItems,
+      notOnEdit,
+      onEditItem,
+      isChecked,
+      markChecked,
+      markTask,
+      submitChangeTask,
+      removeTask,
     } = this.props;
 
-    if (loading) return <Spinner />;
+    if (!loaded) return <Spinner />;
 
     return filteredItems.length ? (
       <ul className="List">
         {filteredItems.slice(indexFirstTask, indexLastTask + 1).map(task => {
-          if (task.timeId === this.props.onEditItem) {
+          const { timeId, isDone } = task;
+          if (timeId === onEditItem) {
             return (
-              <li className="tasks" key={task.timeId} onMouseLeave={this.props.notOnEdit}>
+              <li className="tasks" key={timeId} onMouseLeave={notOnEdit}>
                 <input
                   type="checkbox"
-                  checked={this.props.isChecked.includes(task.timeId)}
-                  onChange={e => this.props.markChecked(task.timeId, e)}
+                  checked={isChecked.includes(timeId)}
+                  onChange={e => markChecked(timeId, e)}
                 />
                 <input
                   type="text"
@@ -52,63 +60,45 @@ class List extends Component {
                   value={this.state.value}
                   onChange={this.handleChange}
                 />
-                <input
-                  type="checkbox"
-                  checked={task.isDone}
-                  onChange={e => this.props.markTask(task.timeId, e)}
-                />
+                <input type="checkbox" checked={isDone} onChange={e => markTask(timeId, e)} />
                 <button
                   className="Edit-button"
-                  onClick={() => this.props.submitChangeTask(this.state.value, task.timeId)}
+                  onClick={() => submitChangeTask(this.state.value, timeId)}
                 >
                   Save
                 </button>
-                <button className="Delete-button" onClick={this.props.notOnEdit}>
+                <button className="Delete-button" onClick={notOnEdit}>
                   Cancel
                 </button>
               </li>
             );
-          } else if (this.state.hoverableItem === task.timeId) {
+          } else if (this.state.hoverableItem === timeId) {
             return (
-              <li className="tasks" key={task.timeId} onMouseLeave={this.hoverOff}>
+              <li className="tasks" key={timeId} onMouseLeave={this.hoverOff}>
                 <input
                   type="checkbox"
-                  checked={this.props.isChecked.includes(task.timeId)}
-                  onChange={e => this.props.markChecked(task.timeId, e)}
+                  checked={isChecked.includes(timeId)}
+                  onChange={e => markChecked(timeId, e)}
                 />
-                <span className={task.isDone ? 'marked-title' : 'regular-title'}>{task.task}</span>
-                <input
-                  type="checkbox"
-                  checked={task.isDone}
-                  onChange={e => this.props.markTask(task.timeId, e)}
-                />
-                <button
-                  className="Edit-button"
-                  onClick={() => this.editTitle(task.timeId, task.task)}
-                >
+                <span className={isDone ? 'marked-title' : 'regular-title'}>{task.task}</span>
+                <input type="checkbox" checked={isDone} onChange={e => markTask(timeId, e)} />
+                <button className="Edit-button" onClick={() => this.editTitle(timeId, task.task)}>
                   Edit
                 </button>
-                <button
-                  className="Delete-button"
-                  onClick={() => this.props.removeTask(task.timeId)}
-                >
+                <button className="Delete-button" onClick={() => removeTask(timeId)}>
                   Remove
                 </button>
               </li>
             );
           } else
             return (
-              <li
-                className="tasks"
-                key={task.timeId}
-                onMouseEnter={() => this.hoverOn(task.timeId)}
-              >
+              <li className="tasks" key={timeId} onMouseEnter={() => this.hoverOn(timeId)}>
                 <input
                   type="checkbox"
-                  checked={this.props.isChecked.includes(task.timeId)}
-                  onChange={e => this.props.markChecked(task.timeId, e)}
+                  checked={isChecked.includes(timeId)}
+                  onChange={e => markChecked(timeId, e)}
                 />
-                <span className={task.isDone ? 'marked-title wide' : 'regular-title wide'}>
+                <span className={isDone ? 'marked-title wide' : 'regular-title wide'}>
                   {task.task}
                 </span>
               </li>

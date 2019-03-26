@@ -13,9 +13,11 @@ class Pagination extends Component {
   };
 
   render() {
-    return this.props.filteredItems.length > 10 ? (
+    const { filteredItems } = this.props;
+
+    return filteredItems.length > 10 ? (
       <div className="Container-List">
-        {[...Array(Math.ceil(this.props.filteredItems.length / 10))].map((x, i) => (
+        {[...Array(Math.ceil(filteredItems.length / 10))].map((x, i) => (
           <button
             className={`Pagination-button ${this.state.activeButton === i + 1 ? 'active' : ''}`}
             key={i}

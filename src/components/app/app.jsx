@@ -18,13 +18,12 @@ class App extends Component {
     showActive: false,
     showCompleted: false,
     sortByTitle: false,
-    loading: true,
+    loaded: false,
   };
 
   componentDidMount() {
-    //const delay = t => );
     new Promise(resolve => setTimeout(resolve, 3000)).then(() => {
-      this.setState({ loading: false });
+      this.setState({ loaded: true });
       return this.showProcessedResult();
     });
   }
@@ -68,13 +67,17 @@ class App extends Component {
       },
       () => this.showProcessedResult()
     );
+    //////////
   };
 
   uncheckAll = () => {
-    const { indexFirstTask, indexLastTask } = this.state.edgeItems;
+    const {
+      edgeItems: { indexFirstTask, indexLastTask },
+      filteredItems,
+    } = this.state;
     const checked = [...this.state.isChecked];
 
-    this.state.filteredItems.forEach((item, i) => {
+    filteredItems.forEach((item, i) => {
       if (i >= indexFirstTask && i <= indexLastTask && checked.includes(item.timeId)) {
         checked.splice(checked.indexOf(item.timeId), 1);
       }
@@ -254,7 +257,7 @@ class App extends Component {
             uncheckAll={this.uncheckAll}
           />
           <List
-            loading={this.state.loading}
+            loaded={this.state.loaded}
             showProcessedResult={this.showProcessedResult}
             isChecked={this.state.isChecked}
             notOnEdit={this.notOnEdit}
