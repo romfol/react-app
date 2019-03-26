@@ -57,9 +57,10 @@ class App extends Component {
   };
 
   deleteChecked = () => {
-    const newTasks = [...this.state.tasks].filter(
-      task => !this.state.isChecked.includes(task.timeId)
-    );
+    const { tasks, isChecked } = this.state;
+    const newTasks = [...tasks].filter(task => !isChecked.includes(task.timeId));
+
+    //isChecked: [...isChecked].splice([...isChecked].indexOf(id), 1),
 
     this.setState(
       {
@@ -125,10 +126,13 @@ class App extends Component {
   };
 
   removeTask = id => {
-    const newList = this.state.tasks.filter(task => task.timeId !== id);
+    const { tasks, isChecked } = this.state;
+    const newList = tasks.filter(task => task.timeId !== id);
+
     this.setState(
       {
         tasks: newList,
+        isChecked: [...isChecked].splice([...isChecked].indexOf(id), 1),
       },
       () => this.showProcessedResult()
     );
@@ -269,7 +273,6 @@ class App extends Component {
             markTask={this.markTask}
             onEdit={this.onEdit}
             submitChangeTask={this.submitChangeTask}
-            cancelChangeTask={this.cancelChangeTask}
             markChecked={this.markChecked}
           />
           <Pagination
