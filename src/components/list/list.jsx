@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Spinner } from '../spinner/spinner';
 import './styles.css';
 
 class List extends Component {
@@ -27,9 +28,12 @@ class List extends Component {
 
   render() {
     const {
+      loading,
       edgeItems: { indexFirstTask, indexLastTask },
       filteredItems,
     } = this.props;
+
+    if (loading) return <Spinner />;
 
     return filteredItems.length ? (
       <ul className="List">
