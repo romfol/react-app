@@ -10,6 +10,13 @@ class List extends Component {
     });
   };
 
+  editTitle = (id, title) => {
+    this.setState({
+      value: title,
+    });
+    this.props.onEdit(id);
+  };
+
   hoverOn = id => {
     this.setState({ hoverableItem: id });
   };
@@ -17,6 +24,20 @@ class List extends Component {
   hoverOff = () => {
     this.setState({ hoverableItem: null });
   };
+
+  componentDidUpdate(prevProps) {
+    const { tasks, setEdgeTasksToShow, showFiltered, filteredTasks, edgeItems } = this.props;
+    if (tasks.length && tasks.length - 1 < edgeItems.indexFirstTask) {
+      setEdgeTasksToShow();
+    }
+    if (
+      showFiltered &&
+      filteredTasks.length &&
+      filteredTasks.length - 1 < edgeItems.indexFirstTask
+    ) {
+      setEdgeTasksToShow();
+    }
+  }
 
   render() {
     const { indexFirstTask, indexLastTask } = this.props.edgeItems;
@@ -27,7 +48,11 @@ class List extends Component {
         {tasks.slice(indexFirstTask, indexLastTask + 1).map(task => {
           if (task.onEdit) {
             return (
-              <li className="tasks" key={task.timeId}>
+              <li
+                className="tasks"
+                key={task.timeId}
+                onMouseLeave={() => this.props.onEdit(task.timeId)}
+              >
                 <input
                   type="checkbox"
                   checked={task.isChecked}
@@ -44,10 +69,15 @@ class List extends Component {
                   checked={task.isDone}
                   onChange={e => this.props.markTask(task.timeId, e)}
                 />
-                <button onClick={() => this.props.submitChangeTask(this.state.value, task.timeId)}>
+                <button
+                  className="Edit-button"
+                  onClick={() => this.props.submitChangeTask(this.state.value, task.timeId)}
+                >
                   Save
                 </button>
-                <button onClick={() => this.props.onEdit(task.timeId)}>Cancel</button>
+                <button className="Delete-button" onClick={() => this.props.onEdit(task.timeId)}>
+                  Cancel
+                </button>
               </li>
             );
           } else if (this.state.hoverableItem === task.timeId) {
@@ -64,7 +94,10 @@ class List extends Component {
                   checked={task.isDone}
                   onChange={e => this.props.markTask(task.timeId, e)}
                 />
-                <button className="Edit-button" onClick={() => this.props.onEdit(task.timeId)}>
+                <button
+                  className="Edit-button"
+                  onClick={() => this.editTitle(task.timeId, task.task)}
+                >
                   Edit
                 </button>
                 <button
@@ -87,7 +120,9 @@ class List extends Component {
                   checked={task.isChecked}
                   onChange={e => this.props.markChecked(task.timeId, e)}
                 />
-                <span className={task.isDone ? 'marked-title' : 'regular-title'}>{task.task}</span>
+                <span className={task.isDone ? 'marked-title wide' : 'regular-title wide'}>
+                  {task.task}
+                </span>
               </li>
             );
         })}

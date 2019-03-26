@@ -9,20 +9,28 @@
 
 .marked-title {
   text-decoration: line-through;
-  font-weight: 600
+  font-weight: 600;
+  width: 9rem;
+  word-wrap: break-word;
 }
 
 .regular-title {
   font-weight: 700;
-  font-style: oblique
+  font-style: oblique;
+  width: 9rem;
+  word-wrap: break-word;
 }
 
 .tasks {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   background-color: rgb(35, 141, 106);
   margin-top: 1em;
   padding: 1em;
+}
+
+.wide {
+  width: 20rem;
 }
 
 .Edit-button {
@@ -30,7 +38,7 @@
   font-weight: bold;
   border: none;
   border-radius: 5px;
-  padding: 7px 12px
+  padding: 3px 8px
 }
 
 .Delete-button {
@@ -38,7 +46,7 @@
   font-weight: bold;
   border: none;
   border-radius: 5px;
-  padding: 7px 12px
+  padding: 3px 8px
 }
 
 .NoTasksText {
