@@ -22,7 +22,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    new Promise(resolve => setTimeout(resolve, 3000)).then(() => {
+    new Promise(resolve => setTimeout(resolve, 1000)).then(() => {
       this.setState({ loaded: true });
       return this.showProcessedResult();
     });
@@ -58,25 +58,26 @@ class App extends Component {
 
   deleteChecked = () => {
     const { tasks, isChecked } = this.state;
-    const newTasks = [...tasks].filter(task => !isChecked.includes(task.timeId));
 
-    //isChecked: [...isChecked].splice([...isChecked].indexOf(id), 1),
+    const newTasks = tasks.filter(task => !isChecked.includes(task.timeId));
+    //const checked = isChecked.filter(() => isChecked.includes(newTasks.timeId));
 
     this.setState(
       {
         tasks: newTasks,
+        isChecked: 0,
       },
       () => this.showProcessedResult()
     );
-    //////////
   };
 
   uncheckAll = () => {
     const {
       edgeItems: { indexFirstTask, indexLastTask },
       filteredItems,
+      isChecked,
     } = this.state;
-    const checked = [...this.state.isChecked];
+    const checked = [...isChecked];
 
     filteredItems.forEach((item, i) => {
       if (i >= indexFirstTask && i <= indexLastTask && checked.includes(item.timeId)) {
@@ -87,20 +88,19 @@ class App extends Component {
   };
 
   checkAll = () => {
-    const { indexFirstTask, indexLastTask } = this.state.edgeItems;
-    const items = [...this.state.filteredItems];
+    const {
+      edgeItems: { indexFirstTask, indexLastTask },
+      isChecked,
+      filteredItems: items,
+    } = this.state;
 
     const checkedItems = [];
     items.forEach((item, i) => {
-      if (
-        i >= indexFirstTask &&
-        i <= indexLastTask &&
-        !this.state.isChecked.includes(item.timeId)
-      ) {
+      if (i >= indexFirstTask && i <= indexLastTask && !isChecked.includes(item.timeId)) {
         checkedItems.push(items[i].timeId);
       }
     });
-    this.setState({ isChecked: [...this.state.isChecked, ...checkedItems] });
+    this.setState({ isChecked: [...isChecked, ...checkedItems] });
   };
 
   submitChangeTask = (newTask, id) => {
@@ -127,12 +127,15 @@ class App extends Component {
 
   removeTask = id => {
     const { tasks, isChecked } = this.state;
+    const checked = [...isChecked];
+
     const newList = tasks.filter(task => task.timeId !== id);
+    if (checked.includes(id)) checked.splice(checked.indexOf(id), 1);
 
     this.setState(
       {
         tasks: newList,
-        isChecked: [...isChecked].splice([...isChecked].indexOf(id), 1),
+        isChecked: checked,
       },
       () => this.showProcessedResult()
     );
