@@ -62,22 +62,30 @@ class App extends Component {
       tasks,
       isChecked,
       edgeItems: { indexFirstTask, indexLastTask },
+      filteredItems,
     } = this.state;
     const checked = [];
 
-    const newTasks = tasks.filter(
-      (task, i) => !isChecked.includes(task.timeId) || indexLastTask < i || i < indexFirstTask
-    );
-    newTasks.forEach(item => {
-      if (isChecked.includes(item.timeId)) {
-        checked.push(item.timeId);
-      }
+    const newTasks = tasks.filter((task, i) => {
+      console.log(!isChecked.includes(task.timeId), i < indexFirstTask, indexLastTask < i);
+      return (
+        !isChecked.includes(task.timeId) ||
+        i < filteredItems[indexFirstTask] ||
+        filteredItems[indexLastTask] < i
+      );
     });
+
+    console.log(newTasks);
+    // newTasks.forEach(item => {
+    //   if (isChecked.includes(item.timeId)) {
+    //     checked.push(item.timeId);
+    //   }
+    // });
 
     this.setState(
       {
         tasks: newTasks,
-        isChecked: checked,
+        //isChecked: checked,
       },
       () => this.showProcessedResult()
     );
