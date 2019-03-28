@@ -65,22 +65,21 @@ class App extends Component {
     } = this.state;
     const checked = [];
 
-    const newTasks = tasks.filter((task, i) => {
-      if (i >= indexFirstTask && i <= indexLastTask) {
-        return !isChecked.includes(task.timeId);
-      } else return task;
-    });
+    const newTasks = tasks.filter(
+      // eslint-disable-next-line no-mixed-operators
+      (task, i) => !isChecked.includes(task.timeId) || indexLastTask < i || i < indexFirstTask
+    );
 
-    [...isChecked].forEach(id => {
-      newTasks.forEach(e => {
-        if (e.timeId === id) checked.push(e.timeId);
-      });
-    });
+    // [...isChecked].forEach(id => {
+    //   newTasks.forEach(e => {
+    //     if (e.timeId === id) checked.push(e.timeId);
+    //   });
+    // });
 
     this.setState(
       {
         tasks: newTasks,
-        isChecked: checked,
+        //isChecked: 0,
       },
       () => this.showProcessedResult()
     );
