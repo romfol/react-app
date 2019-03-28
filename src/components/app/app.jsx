@@ -19,6 +19,7 @@ class App extends Component {
     showCompleted: false,
     sortByTitle: false,
     loaded: false,
+    activeButton: 1,
   };
 
   componentDidMount() {
@@ -43,7 +44,7 @@ class App extends Component {
     const differIndexFromFirstToLast = 9;
     const indexLastTask = currentPage * tasksPerPage - 1;
     const indexFirstTask = indexLastTask - differIndexFromFirstToLast;
-    this.setState({ edgeItems: { indexFirstTask, indexLastTask } });
+    this.setState({ edgeItems: { indexFirstTask, indexLastTask }, activeButton: +currentPage });
   };
 
   markChecked = id => {
@@ -293,6 +294,7 @@ class App extends Component {
             markChecked={this.markChecked}
           />
           <Pagination
+            activeButton={this.state.activeButton}
             setEdgeTasksToShow={this.setEdgeTasksToShow}
             filteredItems={this.state.filteredItems}
           />
