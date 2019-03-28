@@ -66,20 +66,18 @@ class App extends Component {
     const checked = [];
 
     const newTasks = tasks.filter(
-      // eslint-disable-next-line no-mixed-operators
       (task, i) => !isChecked.includes(task.timeId) || indexLastTask < i || i < indexFirstTask
     );
-
-    // [...isChecked].forEach(id => {
-    //   newTasks.forEach(e => {
-    //     if (e.timeId === id) checked.push(e.timeId);
-    //   });
-    // });
+    newTasks.forEach(item => {
+      if (isChecked.includes(item.timeId)) {
+        checked.push(item.timeId);
+      }
+    });
 
     this.setState(
       {
         tasks: newTasks,
-        //isChecked: 0,
+        isChecked: checked,
       },
       () => this.showProcessedResult()
     );
