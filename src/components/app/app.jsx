@@ -189,9 +189,7 @@ class App extends Component {
   showProcessedResult = () => {
     const { showActive, showCompleted, sortByTitle, tasks } = this.state;
     const allItems = [...tasks];
-
     const result = sortTasks(filterTasks(allItems, showActive, showCompleted), sortByTitle);
-
     this.setState({ filteredItems: result });
   };
 
