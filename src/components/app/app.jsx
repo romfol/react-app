@@ -4,6 +4,7 @@ import List from '../list/list';
 import { CheckingButtons } from '../checkingButtons/checkingButtons';
 import Pagination from '../pagination/pagination';
 import items from '../../itemsList';
+import { sortTasks, filterTasks } from '../../services';
 
 import './styles.css';
 
@@ -62,30 +63,25 @@ class App extends Component {
       tasks,
       isChecked,
       edgeItems: { indexFirstTask, indexLastTask },
-      filteredItems,
+      // filteredItems,
     } = this.state;
     const checked = [];
 
     const newTasks = tasks.filter((task, i) => {
-      console.log(!isChecked.includes(task.timeId), i < indexFirstTask, indexLastTask < i);
-      return (
-        !isChecked.includes(task.timeId) ||
-        i < filteredItems[indexFirstTask] ||
-        filteredItems[indexLastTask] < i
-      );
+      //console.log(!isChecked.includes(task.timeId), i <= indexFirstTask, indexLastTask <= i);
+      return !isChecked.includes(task.timeId) || i < indexFirstTask || indexLastTask < i;
     });
 
-    console.log(newTasks);
-    // newTasks.forEach(item => {
-    //   if (isChecked.includes(item.timeId)) {
-    //     checked.push(item.timeId);
-    //   }
-    // });
+    newTasks.forEach(item => {
+      if (isChecked.includes(item.timeId)) {
+        checked.push(item.timeId);
+      }
+    });
 
     this.setState(
       {
         tasks: newTasks,
-        //isChecked: checked,
+        isChecked: checked,
       },
       () => this.showProcessedResult()
     );
@@ -195,31 +191,6 @@ class App extends Component {
     const allItems = [...tasks];
 
     const result = sortTasks(filterTasks(allItems, showActive, showCompleted), sortByTitle);
-
-    function filterTasks(allItems, showActive, showCompleted) {
-      if (showActive) {
-        return allItems.filter(task => !task.isDone);
-      } else if (showCompleted) {
-        return allItems.filter(task => task.isDone);
-      } else return allItems;
-    }
-
-    function sortTasks(allItems, sortByTitle) {
-      if (sortByTitle) {
-        allItems.sort((a, b) => {
-          const taskA = a.task.toUpperCase();
-          const taskB = b.task.toUpperCase();
-          if (taskA < taskB) {
-            return -1;
-          }
-          if (taskA > taskB) {
-            return 1;
-          }
-          return 0;
-        });
-        return allItems;
-      } else return allItems;
-    }
 
     this.setState({ filteredItems: result });
   };
