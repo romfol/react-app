@@ -30,16 +30,6 @@ class App extends Component {
     });
   }
 
-  // componentDidUpdate() {
-  //   const {
-  //     filteredItems,
-  //     edgeItems: { indexFirstTask },
-  //   } = this.state;
-  //   if (filteredItems.length && filteredItems.length - 1 < indexFirstTask) {
-  //     this.setEdgeTasksToShow();
-  //   }
-  // }
-
   markChecked = id => {
     const checked = [...this.state.isChecked];
     if (!checked.includes(id)) {
@@ -51,18 +41,15 @@ class App extends Component {
   };
 
   deleteChecked = () => {
-    const {
-      tasks,
-      isChecked,
-      edgeItems: { indexFirstTask, indexLastTask },
-      // filteredItems,
-    } = this.state;
+    const { tasks, isChecked, items } = this.state;
+
+    const deletedIds = [];
     const checked = [];
 
-    const newTasks = tasks.filter((task, i) => {
-      //console.log(!isChecked.includes(task.timeId), i <= indexFirstTask, indexLastTask <= i);
-      return !isChecked.includes(task.timeId) || i < indexFirstTask || indexLastTask < i;
+    items.forEach(e => {
+      if (isChecked.includes(e.timeId)) deletedIds.push(e.timeId);
     });
+    const newTasks = tasks.filter(e => !deletedIds.includes(e.timeId));
 
     newTasks.forEach(item => {
       if (isChecked.includes(item.timeId)) {
@@ -80,15 +67,11 @@ class App extends Component {
   };
 
   uncheckAll = () => {
-    const {
-      edgeItems: { indexFirstTask, indexLastTask },
-      items,
-      isChecked,
-    } = this.state;
+    const { items, isChecked } = this.state;
     const checked = [...isChecked];
 
     items.forEach((item, i) => {
-      if (i >= indexFirstTask && i <= indexLastTask && checked.includes(item.timeId)) {
+      if (checked.includes(item.timeId)) {
         checked.splice(checked.indexOf(item.timeId), 1);
       }
     });
@@ -96,15 +79,11 @@ class App extends Component {
   };
 
   checkAll = () => {
-    const {
-      edgeItems: { indexFirstTask, indexLastTask },
-      isChecked,
-      items,
-    } = this.state;
+    const { isChecked, items } = this.state;
 
     const checkedItems = [];
     items.forEach((item, i) => {
-      if (i >= indexFirstTask && i <= indexLastTask && !isChecked.includes(item.timeId)) {
+      if (!isChecked.includes(item.timeId)) {
         checkedItems.push(items[i].timeId);
       }
     });
@@ -112,9 +91,10 @@ class App extends Component {
   };
 
   submitChangeTask = (newTask, id) => {
-    this.state.tasks.forEach((task, i) => {
+    const { tasks } = this.state;
+    tasks.forEach((task, i) => {
       if (task.timeId === id) {
-        const newTasks = [...this.state.tasks];
+        const newTasks = [...tasks];
         newTasks[i].task = newTask;
         this.setState({ tasks: newTasks, onEdit: 0 });
       }
@@ -150,9 +130,10 @@ class App extends Component {
   };
 
   markTask = (id, e) => {
-    this.state.tasks.forEach((task, i) => {
+    const { tasks } = this.state;
+    tasks.forEach((task, i) => {
       if (task.timeId === id) {
-        const markedTasks = [...this.state.tasks];
+        const markedTasks = [...tasks];
         markedTasks[i].isDone = e.target.checked;
         this.setState({ tasks: markedTasks });
       }
@@ -183,7 +164,7 @@ class App extends Component {
   };
 
   showProcessedResult = (currentPage = this.state.activePage) => {
-    const { showActive, showCompleted, sortByTitle, tasks } = this.state;
+    const { showActive, showCompleted, sortByTitle, tasks, activePage } = this.state;
     const allItems = [...tasks];
 
     const filteredAndSorted = sortTasks(
@@ -199,8 +180,8 @@ class App extends Component {
       const indexFirstTask = indexLastTask - differIndexFromFirstToLast;
 
       const filledPages = Math.ceil(filteredAndSorted.length / 10);
-      if (this.state.activePage > filledPages) {
-        this.setState({ activePage: filledPages });
+      if (activePage > filledPages) {
+        this.setState({ activePage: filledPages }, () => this.showProcessedResult());
       }
 
       return allItems.filter((e, i) => indexFirstTask <= i && i <= indexLastTask);
@@ -218,14 +199,15 @@ class App extends Component {
   };
 
   handleSubmit = e => {
+    const { tasks, value } = this.state;
     e.preventDefault();
 
     this.setState(
       {
         tasks: [
-          ...this.state.tasks,
+          ...tasks,
           {
-            task: this.state.value,
+            task: value,
             timeId: Date.now(),
             isDone: false,
           },
