@@ -14,6 +14,7 @@ export const Spinner = () => {
         <div />
         <div />
       </section>
+      <p>just a moment...</p>
     </div>
   );
 };

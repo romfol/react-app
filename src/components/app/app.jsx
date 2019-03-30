@@ -3,7 +3,7 @@ import { ShowingAndSortingButtons } from '../showing-sortingButtons/showing-sort
 import List from '../list/list';
 import { CheckingButtons } from '../checkingButtons/checkingButtons';
 import Pagination from '../pagination/pagination';
-import items from '../../itemsList';
+import templateList from '../../itemsList';
 import { sortTasks, filterTasks } from '../../services';
 
 import './styles.css';
@@ -11,42 +11,34 @@ import './styles.css';
 class App extends Component {
   state = {
     value: '',
-    tasks: items,
-    filteredItems: [],
-    edgeItems: { indexFirstTask: 0, indexLastTask: 9 },
+    tasks: templateList,
+    items: [],
+    filteredAndSorted: [],
     onEdit: 0,
     isChecked: [],
     showActive: false,
     showCompleted: false,
     sortByTitle: false,
     loaded: false,
-    activeButton: 1,
+    activePage: 1,
   };
 
   componentDidMount() {
-    new Promise(resolve => setTimeout(resolve, 1000)).then(() => {
+    new Promise(resolve => setTimeout(resolve, 2000)).then(() => {
       this.setState({ loaded: true });
       return this.showProcessedResult();
     });
   }
 
-  componentDidUpdate() {
-    const {
-      filteredItems,
-      edgeItems: { indexFirstTask },
-    } = this.state;
-    if (filteredItems.length && filteredItems.length - 1 < indexFirstTask) {
-      this.setEdgeTasksToShow();
-    }
-  }
-
-  setEdgeTasksToShow = (currentPage = 1) => {
-    const tasksPerPage = 10;
-    const differIndexFromFirstToLast = 9;
-    const indexLastTask = currentPage * tasksPerPage - 1;
-    const indexFirstTask = indexLastTask - differIndexFromFirstToLast;
-    this.setState({ edgeItems: { indexFirstTask, indexLastTask }, activeButton: +currentPage });
-  };
+  // componentDidUpdate() {
+  //   const {
+  //     filteredItems,
+  //     edgeItems: { indexFirstTask },
+  //   } = this.state;
+  //   if (filteredItems.length && filteredItems.length - 1 < indexFirstTask) {
+  //     this.setEdgeTasksToShow();
+  //   }
+  // }
 
   markChecked = id => {
     const checked = [...this.state.isChecked];
@@ -90,12 +82,12 @@ class App extends Component {
   uncheckAll = () => {
     const {
       edgeItems: { indexFirstTask, indexLastTask },
-      filteredItems,
+      items,
       isChecked,
     } = this.state;
     const checked = [...isChecked];
 
-    filteredItems.forEach((item, i) => {
+    items.forEach((item, i) => {
       if (i >= indexFirstTask && i <= indexLastTask && checked.includes(item.timeId)) {
         checked.splice(checked.indexOf(item.timeId), 1);
       }
@@ -107,7 +99,7 @@ class App extends Component {
     const {
       edgeItems: { indexFirstTask, indexLastTask },
       isChecked,
-      filteredItems: items,
+      items,
     } = this.state;
 
     const checkedItems = [];
@@ -186,11 +178,37 @@ class App extends Component {
     this.setState({ sortByTitle: true }, () => this.showProcessedResult());
   };
 
-  showProcessedResult = () => {
+  pagination = activePage => {
+    this.setState({ activePage }, () => this.showProcessedResult());
+  };
+
+  showProcessedResult = (currentPage = this.state.activePage) => {
     const { showActive, showCompleted, sortByTitle, tasks } = this.state;
     const allItems = [...tasks];
-    const result = sortTasks(filterTasks(allItems, showActive, showCompleted), sortByTitle);
-    this.setState({ filteredItems: result });
+
+    const filteredAndSorted = sortTasks(
+      filterTasks(allItems, showActive, showCompleted),
+      sortByTitle
+    );
+    this.setState({ filteredAndSorted });
+
+    const pagination = (allItems, currentPage) => {
+      const tasksPerPage = 10;
+      const differIndexFromFirstToLast = 9;
+      const indexLastTask = currentPage * tasksPerPage - 1;
+      const indexFirstTask = indexLastTask - differIndexFromFirstToLast;
+
+      const filledPages = Math.ceil(filteredAndSorted.length / 10);
+      if (this.state.activePage > filledPages) {
+        this.setState({ activePage: filledPages });
+      }
+
+      return allItems.filter((e, i) => indexFirstTask <= i && i <= indexLastTask);
+    };
+
+    const result = pagination(filteredAndSorted, currentPage);
+
+    this.setState({ items: result });
   };
 
   handleChange = e => {
@@ -258,9 +276,8 @@ class App extends Component {
             isChecked={this.state.isChecked}
             notOnEdit={this.notOnEdit}
             onEditItem={this.state.onEdit}
-            setEdgeTasksToShow={this.setEdgeTasksToShow}
             edgeItems={this.state.edgeItems}
-            filteredItems={this.state.filteredItems}
+            items={this.state.items}
             removeTask={this.removeTask}
             markTask={this.markTask}
             onEdit={this.onEdit}
@@ -268,9 +285,9 @@ class App extends Component {
             markChecked={this.markChecked}
           />
           <Pagination
-            activeButton={this.state.activeButton}
-            setEdgeTasksToShow={this.setEdgeTasksToShow}
-            filteredItems={this.state.filteredItems}
+            activePage={this.state.activePage}
+            pagination={this.pagination}
+            filteredAndSorted={this.state.filteredAndSorted}
           />
         </div>
       </div>

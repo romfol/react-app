@@ -29,8 +29,8 @@ class List extends Component {
   render() {
     const {
       loaded,
-      edgeItems: { indexFirstTask, indexLastTask },
-      filteredItems,
+      //edgeItems: { indexFirstTask, indexLastTask },
+      items,
       notOnEdit,
       onEditItem,
       isChecked,
@@ -42,9 +42,9 @@ class List extends Component {
 
     if (!loaded) return <Spinner />;
 
-    return filteredItems.length ? (
+    return items.length ? (
       <ul className="List">
-        {filteredItems.slice(indexFirstTask, indexLastTask + 1).map(task => {
+        {items.map(task => {
           const { timeId, isDone } = task;
           if (timeId === onEditItem) {
             return (
