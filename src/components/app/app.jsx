@@ -162,7 +162,7 @@ class App extends Component {
   pagination = activePage => {
     this.setState({ activePage }, () => this.showProcessedResult());
   };
-
+  // ? this.state.activePage : 1
   showProcessedResult = (currentPage = this.state.activePage) => {
     const { showActive, showCompleted, sortByTitle, tasks, activePage } = this.state;
     const allItems = [...tasks];
@@ -179,8 +179,8 @@ class App extends Component {
       const indexLastTask = currentPage * tasksPerPage - 1;
       const indexFirstTask = indexLastTask - differIndexFromFirstToLast;
 
-      const filledPages = Math.ceil(filteredAndSorted.length / 10);
-      if (activePage > filledPages) {
+      const filledPages = Math.ceil(allItems.length / 10);
+      if (filledPages && activePage > filledPages) {
         this.setState({ activePage: filledPages }, () => this.showProcessedResult());
       }
 
