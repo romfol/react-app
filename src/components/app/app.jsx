@@ -162,7 +162,7 @@ class App extends Component {
   pagination = activePage => {
     this.setState({ activePage }, () => this.showProcessedResult());
   };
-  // ? this.state.activePage : 1
+ 
   showProcessedResult = (currentPage = this.state.activePage) => {
     const { showActive, showCompleted, sortByTitle, tasks, activePage } = this.state;
     const allItems = [...tasks];
