@@ -2,7 +2,7 @@
   "name": "awesome-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://romfol.github.io/",
+  "homepage": "https://romfol.github.io/to-do-list",
   "dependencies": {
     "gh-pages": "^2.0.1",
     "react": "^16.8.3",
