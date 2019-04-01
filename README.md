@@ -1,4 +1,5 @@
-App on a server: https://to-do-list-on-react.herokuapp.com/
+Application on Github pages: https://romfol.github.io/to-do-list/
+Application on a server: https://to-do-list-on-react.herokuapp.com/
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
