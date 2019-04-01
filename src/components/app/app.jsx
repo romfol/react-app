@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { ShowingAndSortingButtons } from '../showing-sortingButtons/showing-sortingButtons';
 import List from '../list/list';
 import { CheckingButtons } from '../checkingButtons/checkingButtons';
-import Pagination from '../pagination/pagination';
+import { Pagination } from '../pagination/pagination';
 import templateList from '../../itemsList';
-import { sortTasks, filterTasks } from '../../services';
+import { sortTasks, filterTasks, pagesAmount } from '../../services';
 
 import './styles.css';
 
@@ -13,7 +13,7 @@ class App extends Component {
     value: '',
     tasks: templateList,
     items: [],
-    filteredAndSorted: [],
+    pagesAmount: 0,
     onEdit: 0,
     isChecked: [],
     showActive: false,
@@ -162,7 +162,7 @@ class App extends Component {
   pagination = activePage => {
     this.setState({ activePage }, () => this.showProcessedResult());
   };
- 
+
   showProcessedResult = (currentPage = this.state.activePage) => {
     const { showActive, showCompleted, sortByTitle, tasks, activePage } = this.state;
     const allItems = [...tasks];
@@ -171,7 +171,9 @@ class App extends Component {
       filterTasks(allItems, showActive, showCompleted),
       sortByTitle
     );
-    this.setState({ filteredAndSorted });
+
+    const pages = pagesAmount(filteredAndSorted);
+    this.setState({ pagesAmount: pages });
 
     const pagination = (allItems, currentPage) => {
       const tasksPerPage = 10;
@@ -179,11 +181,9 @@ class App extends Component {
       const indexLastTask = currentPage * tasksPerPage - 1;
       const indexFirstTask = indexLastTask - differIndexFromFirstToLast;
 
-      const filledPages = Math.ceil(allItems.length / 10);
-      if (filledPages && activePage > filledPages) {
-        this.setState({ activePage: filledPages }, () => this.showProcessedResult());
+      if (pages && activePage > pages) {
+        this.setState({ activePage: pages }, () => this.showProcessedResult());
       }
-
       return allItems.filter((e, i) => indexFirstTask <= i && i <= indexLastTask);
     };
 
@@ -268,8 +268,8 @@ class App extends Component {
           />
           <Pagination
             activePage={this.state.activePage}
+            pagesAmount={this.state.pagesAmount}
             pagination={this.pagination}
-            filteredAndSorted={this.state.filteredAndSorted}
           />
         </div>
       </div>

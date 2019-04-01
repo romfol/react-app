@@ -22,3 +22,6 @@ export function filterTasks(allItems, showActive, showCompleted) {
     return allItems.filter(task => task.isDone);
   } else return allItems;
 }
+
+export const pagesAmount = (allItems, itemsPerPage = 10) =>
+  Math.ceil(allItems.length / itemsPerPage);
